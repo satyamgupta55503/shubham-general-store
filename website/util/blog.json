@@ -1,0 +1,98 @@
+[
+    {
+        "id":1,
+        "title": "Scientists speculate that ours might not be held",
+        "img": "news.png",
+        "category": "Gaming",
+        "author": "miranda h.",
+        "date": "25 April 2023"
+    },
+    {
+        "id":2,
+        "title": "The Multiverse is the collection of alternate universes",
+        "img": "news2.png",
+        "category": "Tech",
+        "author": "miranda h.",
+        "date": "25 April 2023"
+    },
+    {
+        "id":3,
+        "title": "That share a universal hierarchy a large variety of these",
+        "img": "news3.png",
+        "category": "Movie",
+        "author": "miranda h.",
+        "date": "25 April 2023"
+    },
+    {
+        "id":4,
+        "title": "Universes were originated from another due to a major",
+        "img": "news4.png",
+        "category": "Sports",
+        "author": "miranda h.",
+        "date": "25 April 2023"
+    },
+    {
+        "id":5,
+        "title": "A hypothetical collection of potentially diverse",
+        "img": "news5.png",
+        "category": "Gaming",
+        "author": "miranda h.",
+        "date": "25 April 2023"
+    },
+    {
+        "id":6,
+        "title": "Stanford physicists Andrei Linde In a new study",
+        "img": "news6.png",
+        "category": "Tech",
+        "author": "miranda h.",
+        "date": "25 April 2023"
+    },
+    {
+        "id":7,
+        "title": "Accessible to telescopes, is about 90 billion years",
+        "img": "news7.png",
+        "category": "Movie",
+        "author": "miranda h.",
+        "date": "25 April 2023"
+    },
+    {
+        "id":8,
+        "title": "Observable universes each of which would comprise",
+        "img": "news8.png",
+        "category": "Sports",
+        "author": "miranda h.",
+        "date": "25 April 2023"
+    },
+    {
+        "id":9,
+        "title": "A hypothetical collection of potentially diverse",
+        "img": "news9.png",
+        "category": "Gaming",
+        "author": "miranda h.",
+        "date": "25 April 2023"
+    },
+    {
+        "id":10,
+        "title": "Stanford physicists Andrei Linde In a new study",
+        "img": "news10.png",
+        "category": "Tech",
+        "author": "miranda h.",
+        "date": "25 April 2023"
+    },
+    {
+        "id":11,
+        "title": "Accessible to telescopes, is about 90 billion years",
+        "img": "news11.png",
+        "category": "Movie",
+        "author": "miranda h.",
+        "date": "25 April 2023"
+    },
+    {
+        "id":12,
+        "title": "Observable universes each of which would comprise",
+        "img": "news12.png",
+        "category": "Sports",
+        "author": "miranda h.",
+        "date": "25 April 2023"
+    }
+]

@@ -1,0 +1,302 @@
+.container {
+  background-color: #f8fafc;
+  min-height: 100vh;
+  color: #334155;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  box-sizing: border-box;
+}
+
+/* Tab Navigation Menu Bar */
+.topNav {
+  background-color: #ffffff;
+  border-bottom: 1px solid #e2e8f0;
+  padding: 0 2rem;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  height: 3.5rem;
+}
+
+.activeTab {
+  color: #84cc16;
+  font-weight: 600;
+  border-bottom: 3px solid #84cc16;
+  height: 100%;
+  padding: 0 0.5rem;
+  font-size: 13px;
+  letter-spacing: 0.05em;
+  display: flex;
+  align-items: center;
+  background: none;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  cursor: pointer;
+}
+
+.inactiveTab {
+  color: #94a3b8;
+  font-weight: 500;
+  height: 100%;
+  padding: 0 0.5rem;
+  font-size: 13px;
+  letter-spacing: 0.05em;
+  display: flex;
+  align-items: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.inactiveTab:hover {
+  color: #475569;
+}
+
+/* Main Layout Wrapper */
+.mainLayout {
+  max-w: 1152px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.headerBlock {
+  margin-bottom: 2rem;
+}
+
+.headerBlock h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0;
+  letter-spacing: -0.025em;
+}
+
+.headerBlock p {
+  color: #94a3b8;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+/* Config Layout Panels */
+.panel {
+  background-color: #ffffff;
+  border-radius: 0.75rem;
+  border: 1px solid rgba(226, 232, 240, 0.7);
+  padding: 1.5rem;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.02);
+  margin-bottom: 2rem;
+}
+
+.panelTitle {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin-top: 0;
+  margin-bottom: 1.25rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.gridTwo {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .gridTwo {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* Individual Form Fields */
+.inputGroup {
+  margin-bottom: 1rem;
+}
+
+.label {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #94a3b8;
+  margin-bottom: 0.5rem;
+}
+
+.input {
+  width: 100%;
+  padding: 0.625rem 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid #e2e8f0;
+  font-size: 0.875rem;
+  color: #334155;
+  background-color: #ffffff;
+  box-sizing: border-box;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.input:focus {
+  outline: none;
+  border-color: #84cc16;
+  box-shadow: 0 0 0 4px rgba(132, 204, 22, 0.1);
+}
+
+.textarea {
+  width: 100%;
+  padding: 0.625rem 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid #e2e8f0;
+  font-size: 0.875rem;
+  color: #334155;
+  background-color: #ffffff;
+  box-sizing: border-box;
+  resize: none;
+  line-height: 1.5;
+  transition: border-color 0.2s;
+}
+
+.textarea:focus {
+  outline: none;
+  border-color: #84cc16;
+}
+
+/* Embedded Service Array Cards */
+.subHeading {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 1rem;
+  letter-spacing: -0.025em;
+}
+
+.card {
+  background-color: #ffffff;
+  border-radius: 0.75rem;
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  padding: 1.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: #f1f5f9;
+  transition: background-color 0.2s;
+}
+
+.card:hover::before {
+  background-color: #84cc16;
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.25rem;
+}
+
+.badge {
+  font-size: 10px;
+  font-weight: 700;
+  background-color: #f1f5f9;
+  color: #64748b;
+  padding: 0.25rem 0.625rem;
+  border-radius: 0.375rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.docId {
+  color: #cbd5e1;
+  font-size: 10px;
+  font-family: monospace;
+  user-select: none;
+}
+
+/* Category Style Tag Pills */
+.pillContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+  margin-top: 0.75rem;
+}
+
+.pill {
+  background-color: #f8fafc;
+  border: 1px solid rgba(226, 232, 240, 0.6);
+  color: #64748b;
+  font-size: 11px;
+  padding: 0.125rem 0.75rem;
+  border-radius: 9999px;
+  font-weight: 500;
+}
+
+/* Sticky Action Submit Bar */
+.actionBar {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 1rem;
+  border-top: 1px solid #e2e8f0;
+  margin-top: 2rem;
+}
+
+.saveButton {
+  background-color: #84cc16;
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  border: none;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.1s;
+}
+
+.saveButton:hover {
+  background-color: #72b012;
+}
+
+.saveButton:active {
+  transform: scale(0.99);
+}
+
+.saveButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Spinner Element */
+.spinner {
+  animation: spin 1s linear infinite;
+  height: 0.875rem;
+  width: 0.875rem;
+}
+
+.loadingScreen {
+  min-height: 100vh;
+  background-color: #f8fafc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.875rem;
+  color: #64748b;
+  gap: 0.75rem;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}

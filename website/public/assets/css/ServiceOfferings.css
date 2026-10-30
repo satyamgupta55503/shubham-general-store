@@ -1,0 +1,285 @@
+/* @import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;1,400&display=swap"); */
+
+.service-section {
+  min-height: 100vh;
+  background: #18181b;
+  text-align: center;
+  padding: 5rem 2rem;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.service-subtitle {
+  color: #a1a1aa;
+  font-size: 1.125rem;
+  max-width: 36rem;
+  margin: 0 auto 0.5rem auto;
+  text-transform: capitalize;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.subtitle-icon {
+  color: #8ee013;
+  width: 1.5rem;
+  height: 1.5rem;
+  margin-left: 0.75rem;
+}
+
+.service-title {
+  color: #fff;
+  font-size: 2.25rem;
+  font-weight: 600;
+  max-width: 48rem;
+  margin: 0 auto 4rem auto;
+  line-height: 1.15;
+}
+
+@media (min-width: 768px) {
+  .service-title {
+    font-size: 3rem;
+  }
+}
+@media (min-width: 1280px) {
+  .service-title {
+    font-size: 3.75rem;
+  }
+}
+
+.service-grid-offer {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+  max-width: 80rem;
+  margin: 0 auto;
+  text-align: left;
+}
+
+@media (min-width: 640px) {
+  .service-grid-offer {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.card {
+  position: relative;
+  background: #27272a;
+  padding: 2.5rem;
+  overflow: hidden;
+  transition: box-shadow 0.3s;
+}
+
+.card::before {
+  position: absolute;
+  content: "";
+  width: 100%;
+  height: 100%;
+  transition: 0.6s;
+  z-index: 0;
+  background-color: #8ee013;
+  pointer-events: none;
+}
+
+.card:hover {
+  box-shadow: 1px 1px 20px 6px rgb(0 0 0 / 53%);
+}
+
+.offer-card-1::before {
+  bottom: 0;
+  right: 0;
+  clip-path: circle(calc(100px + 8.5vw) at 100% 100%);
+}
+.offer-card-2::before {
+  bottom: 0;
+  left: 0;
+  clip-path: circle(calc(100px + 8.5vw) at 0% 100%);
+}
+.offer-card-3::before {
+  top: 0;
+  right: 0;
+  clip-path: circle(calc(100px + 8.5vw) at 100% 0%);
+}
+.offer-card-4::before {
+  top: 0;
+  left: 0;
+  clip-path: circle(calc(100px + 8.5vw) at 0% 0%);
+}
+.card:hover::before {
+  clip-path: circle(110vw at 100% 100%);
+}
+
+.circle {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  transition: clip-path 0.6s, background 0.6s;
+  pointer-events: none;
+}
+
+.offer-circle-1 {
+  background: url("https://images.unsplash.com/photo-1587440871875-191322ee64b0?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D")
+    no-repeat 50% 50% / cover;
+  bottom: 0;
+  right: 0;
+  clip-path: circle(calc(100px + 8.5vw) at 100% 100%);
+}
+.offer-card-1:hover .offer-circle-1 {
+  /* clip-path: circle(110vw at 100% 100%); */
+}
+
+.offer-circle-2 {
+  background: url("https://images.unsplash.com/photo-1499951360447-b19be8fe80f5?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D")
+    no-repeat 50% 50% / cover;
+  bottom: 0;
+  left: 0;
+  clip-path: circle(calc(100px + 8.5vw) at 0% 100%);
+}
+.offer-card-2:hover .offer-circle-2 {
+  /* clip-path: circle(110vw at 0% 100%); */
+}
+
+.offer-circle-3 {
+  background: url("https://images.unsplash.com/photo-1557804506-669a67965ba0?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D")
+    no-repeat 50% 50% / cover;
+  top: 0;
+  right: 0;
+  clip-path: circle(calc(100px + 8.5vw) at 100% 0%);
+}
+.offer-card-3:hover .offer-circle-3 {
+  /* clip-path: circle(110vw at 100% 0%); */
+}
+
+.offer-circle-4 {
+  background: url("https://images.unsplash.com/photo-1600880292203-757bb62b4baf?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D")
+    no-repeat 50% 50% / cover;
+  top: 0;
+  left: 0;
+  clip-path: circle(calc(100px + 8.5vw) at 0% 0%);
+}
+.offer-card-4:hover .offer-circle-4 {
+  /* clip-path: circle(110vw at 0% 0%);
+  opacity: 0.8;
+  background-color: #8ee013; */
+}
+
+.offer-content {
+  position: relative;
+  z-index: 1;
+}
+
+.offer-heading {
+  text-transform: capitalize;
+  color: #fff;
+  margin-bottom: 1rem;
+  font-size: 2rem;
+  font-family: "Playfair Display", serif;
+  font-weight: 400;
+  font-style: normal;
+  line-height: 1.2;
+}
+
+@media (min-width: 1280px) {
+  .offer-heading {
+    font-size: 2.5rem;
+  }
+}
+
+.offer-desc {
+  color: #a1a1aa;
+  transition: color 0.8s;
+}
+
+.card:hover .offer-desc {
+  color: #fff;
+}
+
+.offer-content-1 {
+  padding-right: 13rem;
+}
+.offer-content-2 {
+  padding-left: 12rem;
+}
+.offer-content-3 {
+  padding-right: 11rem;
+}
+.offer-content-4 {
+  padding-left: 12rem;
+}
+@media (max-width: 1200px) {
+  .offer-content-1,
+  .offer-content-2,
+  .offer-content-3,
+  .offer-content-4 {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+@media (max-width: 1024px) {
+  .circle,
+  .offer-circle-1,
+  .offer-circle-2,
+  .offer-circle-3,
+  .offer-circle-4 {
+    display: none;
+  }
+}
+
+.offer-list {
+  margin-top: 1.5rem;
+}
+
+.offer-list ul {
+  margin: 0;
+  list-style-type: none;
+}
+
+.offer-list-item {
+  color: #fff; /* changed to white */
+  background: linear-gradient(90deg, #232323 0%, #444 100%);
+  font-size: 1.05rem;
+  margin-bottom: 0.6rem;
+  line-height: 1.65;
+  font-family: inherit;
+  font-weight: 400; /* decreased font weight */
+  text-align: left;
+  border-radius: 0.6em;
+  padding: 0.48em 1em 0.48em 1em;
+  box-shadow: 0 2px 10px 0 rgba(142, 224, 19, 0.09);
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+  position: relative;
+}
+
+.offer-list-item::before {
+  content: "";
+  display: inline-block;
+  width: 0.6em;
+  height: 0.6em;
+  background: #8ee013;
+  border-radius: 50%;
+  margin-right: 0.7em;
+  vertical-align: middle;
+  box-shadow: 0 0 0 2px #b1e86a;
+}
+
+.offer-list-item:last-child {
+  margin-bottom: 0;
+}
+
+.card:hover .offer-list-item {
+  background: linear-gradient(90deg, #444 0%, #232323 100%);
+  color: #fff;
+  box-shadow: 0 4px 20px 0 rgba(142, 224, 19, 0.21);
+}
+
+@media (min-width: 768px) {
+  .offer-list-item {
+    font-size: 1.13rem;
+  }
+}

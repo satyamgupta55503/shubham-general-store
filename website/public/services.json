@@ -1,0 +1,93 @@
+{
+  "services": [
+    {
+      "img": "/assets/imgs/page/homepage1/brand.png",
+      "category": "Branding & Creative Design",
+      "description": "Crafts compelling visual identities to communicate brand essence through logos, graphics, packaging, and print media.",
+      "sub_services": [
+        {
+          "name": "Logo Design (2D & 3D)",
+          "description": "Designs unique, memorable logos—both 2D and 3D—that reflect brand values and establish visual recognition."
+        },
+        {
+          "name": "Graphic Design",
+          "description": "Creates consistent and engaging graphics for digital and print, ensuring strong visual branding across all channels."
+        },
+        {
+          "name": "Mockup & Package Design",
+          "description": "Designs professional packaging and mockups to enhance product aesthetics and appeal to target customers."
+        },
+        {
+          "name": "Layout & Print Design",
+          "description": "Develops clean and effective layouts for brochures, flyers, business cards, and other marketing materials."
+        }
+      ]
+    },
+    {
+      "img": "/assets/imgs/page/homepage1/webapp.png",
+
+      "category": "Web & App Development",
+      "description": "Builds modern, responsive, and scalable digital platforms to establish a strong online presence and functionality.",
+      "sub_services": [
+        {
+          "name": "Website Development",
+          "description": "Creates user-friendly, responsive websites tailored to business goals with optimized performance."
+        },
+        {
+          "name": "E-commerce Website Development",
+          "description": "Develops secure and feature-rich online stores to facilitate seamless shopping experiences and transactions."
+        },
+        {
+          "name": "App Development",
+          "description": "Designs and develops mobile apps (Android & iOS) that offer smooth user experiences and meet specific business needs."
+        }
+      ]
+    },
+    {
+      "img": "/assets/imgs/page/homepage1/digital-campaign.png",
+      "category": "Digital Marketing",
+      "description": "Strategizes and executes performance-driven digital campaigns to increase visibility, engagement, and ROI.",
+      "sub_services": [
+        {
+          "name": "Social Media Marketing",
+          "description": "Manages content and campaigns on platforms like Instagram, Facebook, and LinkedIn to build audience engagement."
+        },
+        {
+          "name": "SEO & Keyword Ranking",
+          "description": "Optimizes websites for better search engine rankings using on-page, off-page, and technical SEO strategies."
+        },
+        {
+          "name": "Paid Marketing (PPC)",
+          "description": "Runs pay-per-click ad campaigns on platforms like Google Ads and Meta Ads to drive traffic and conversions."
+        },
+        {
+          "name": "Email Marketing",
+          "description": "Designs and automates email campaigns to nurture leads, promote offers, and retain customers."
+        },
+        {
+          "name": "Influencer Marketing",
+          "description": "Partners with influencers to extend reach and build authentic brand awareness."
+        }
+      ]
+    },
+    {
+      "img": "/assets/imgs/page/homepage1/post-production.png",
+      "category": "Video & Animation",
+      "description": "Brings stories to life through visual content—videos, animations, and motion graphics—to boost engagement and retention.",
+      "sub_services": [
+        {
+          "name": "Video Editing",
+          "description": "Edits promotional, educational, and corporate videos with professional quality and branding alignment."
+        },
+        {
+          "name": "Animations",
+          "description": "Creates custom 2D/3D animations to explain concepts or tell stories in an engaging visual format."
+        },
+        {
+          "name": "After Effects & Motion Graphics",
+          "description": "Produces eye-catching motion designs using Adobe After Effects to elevate video content and presentations."
+        }
+      ]
+    }
+  ]
+}

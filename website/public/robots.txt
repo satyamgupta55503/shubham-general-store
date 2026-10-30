@@ -1,0 +1,20 @@
+# robots.txt — DigiKraft Social
+# https://www.digikraftsocial.com
+
+User-agent: *
+Allow: /
+
+# Block all CRM / HRM / EMP / Admin dashboard routes from indexing
+Disallow: /admin/
+Disallow: /crm/
+Disallow: /hrm/
+Disallow: /emp/
+Disallow: /login
+Disallow: /register
+Disallow: /forget-password
+Disallow: /portals/
+Disallow: /add/
+Disallow: /change-log/
+
+# Sitemap location
+Sitemap: https://www.digikraftsocial.com/sitemap.xml

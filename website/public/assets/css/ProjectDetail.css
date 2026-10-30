@@ -1,0 +1,212 @@
+/* Portfolio Wrapper (Reused from portfolio.css) */
+.portfolio-wrapper {
+  background-color: white;
+  min-height: 100vh;
+  padding: 16px 0;
+}
+
+/* Header (Reused from portfolio.css) */
+.portfolio-header {
+  background-color: white;
+  border-bottom: 1px solid #e2e8f0;
+  padding: 16px 0;
+  position: sticky;
+  top: 4px;
+  z-index: 1000;
+}
+
+.portfolio-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px 24px;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0;
+}
+
+/* Project Hero */
+.project-hero {
+  position: relative;
+  height: 450px;
+  overflow: hidden;
+  border-radius: 16px;
+  margin-bottom: 32px;
+}
+
+.project-hero-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  display: block;
+}
+
+/* Background Image Option (Uncomment if preferred) */
+/*
+.project-hero-image {
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+*/
+
+.project-hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.3), transparent);
+}
+
+.category-badge {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  background-color: #1e293b;
+  color: white;
+  font-weight: 500;
+  font-size: 0.75rem;
+  padding: 4px 12px;
+  border-radius: 12px;
+}
+
+.status-badge {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background-color: #10b981;
+  color: white;
+  font-weight: 500;
+  font-size: 0.75rem;
+  padding: 4px 12px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Project Info */
+.project-title {
+  font-weight: 700;
+  color: #0f172a;
+  font-size: 2.5rem;
+  line-height: 1.3;
+  margin-bottom: 16px;
+}
+
+.project-description {
+  color: #64748b;
+  line-height: 1.6;
+  font-size: 1.1rem;
+  white-space: pre-wrap;
+}
+
+.project-tags {
+  margin-top: 16px;
+}
+
+.project-tag {
+  background-color: #f1f5f9;
+  color: #8ee013;
+  font-size: 0.75rem;
+  font-weight: 500;
+  border: 1px solid #e2e8f0;
+  padding: 4px 12px;
+  border-radius: 12px;
+}
+
+.project-meta {
+  background-color: #fff;
+  border-radius: 12px;
+}
+
+/* Project Links */
+.btn-primary {
+  background-color: #8ee013;
+  border-color: #8ee013;
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #7cc011;
+  border-color: #7cc011;
+}
+
+.btn-outline-secondary {
+  border-color: #cbd5e1;
+  color: #64748b;
+}
+
+.btn-outline-secondary:hover {
+  border-color: #8ee013;
+  background-color: #f1f5f9;
+}
+
+/* Related Projects */
+.project-card {
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.project-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .project-hero {
+    height: 300px;
+  }
+
+  .project-title {
+    font-size: 2rem;
+  }
+
+  .project-description {
+    font-size: 1rem;
+    white-space: pre-wrap;
+  }
+
+  .project-meta {
+    margin-top: 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .portfolio-container {
+    padding: 0 16px;
+  }
+
+  .header-title {
+    font-size: 1.5rem;
+  }
+
+  .project-hero {
+    height: 250px;
+  }
+
+  .project-title {
+    font-size: 1.8rem;
+  }
+
+  .category-badge,
+  .status-badge {
+    font-size: 0.65rem;
+    padding: 3px 10px;
+  }
+}

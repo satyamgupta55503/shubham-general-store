@@ -1,0 +1,315 @@
+/* Custom Global Interface Overrides matching image theme */
+body {
+  background-color: #f8fafc;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  color: #1e293b;
+  margin: 0;
+  padding: 0;
+}
+
+.dashboard-container {
+  padding: 40px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Tab Navigation System Header Styling */
+.top-tabs-nav {
+  display: flex;
+  gap: 30px;
+  border-bottom: 1px solid #e2e8f0;
+  margin-bottom: 40px;
+}
+
+.tab-btn {
+  background: none;
+  border: none;
+  padding: 12px 4px;
+  font-size: 15px;
+  font-weight: 500;
+  color: #64748b;
+  cursor: pointer;
+  position: relative;
+  transition: color 0.2s ease;
+}
+
+.tab-btn:hover {
+  color: #0f172a;
+}
+
+.tab-btn.active {
+  color: #8CEE00;
+  font-weight: 600;
+}
+
+.tab-btn.active::after {
+  content: "";
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background-color: #8CEE00;
+}
+
+/* Typography Headings layout */
+.page-title {
+  font-size: 32px;
+  font-weight: 700;
+  color: #0b1528;
+  margin: 0 0 8px 0;
+}
+
+.page-subtitle {
+  font-size: 15px;
+  color: #64748b;
+  margin: 0 0 35px 0;
+}
+
+/* Control Row Elements */
+.action-bar-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  gap: 20px;
+}
+
+.search-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 320px;
+}
+
+.search-icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #94a3b8;
+  font-size: 14px;
+}
+
+.search-input {
+  width: 100%;
+  padding: 12px 12px 12px 40px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background-color: #ffffff;
+  font-size: 14px;
+  color: #334155;
+  outline: none;
+  transition: box-shadow 0.2s ease;
+}
+
+.search-input:focus {
+  box-shadow: 0 0 0 3px rgba(140, 238, 0, 0.15);
+  border-color: #cbd5e1;
+}
+
+/* Vivid Chartreuse Button Variant matching design token */
+.new-post-btn {
+  background-color: #8CEE00;
+  color: #000000;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.new-post-btn:hover {
+  background-color: #79cd00;
+}
+
+/* Table Setup Elements styling */
+.table-responsive-container {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.custom-dashboard-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.custom-dashboard-table th {
+  background-color: #f8fafc;
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  padding: 16px 24px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.custom-dashboard-table td {
+  padding: 20px 24px;
+  border-bottom: 1px solid #f1f5f9;
+  vertical-align: middle;
+}
+
+/* Complex cell info lines */
+.primary-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #0f172a;
+  margin-bottom: 6px;
+  line-height: 1.4;
+}
+
+.subtitle-url {
+  font-size: 13px;
+  color: #94a3b8;
+  word-break: break-all;
+}
+
+/* Badges styling framework variables */
+.category-badge {
+  background-color: #f1f5f9;
+  color: #475569;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+  display: inline-block;
+}
+
+.author-text {
+  color: #64748b;
+  font-size: 14px;
+}
+
+.link-text {
+  color: #3b82f6;
+  text-decoration: none;
+}
+
+.link-text:hover {
+  text-decoration: underline;
+}
+
+/* Status Pill configuration setup */
+.status-badge-draft {
+  background-color: #fffbeb;
+  color: #d97706;
+  border: 1px solid #fef3c7;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  display: inline-block;
+}
+
+.date-text {
+  color: #64748b;
+  font-size: 14px;
+}
+
+/* Utility Action Button Triggers */
+.action-buttons-group {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+.action-icon-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 6px;
+  border-radius: 6px;
+  transition: background-color 0.2s ease;
+}
+
+.action-icon-btn:hover {
+  background-color: #f1f5f9;
+}
+
+.text-center {
+  text-align: center;
+  color: #94a3b8;
+  padding: 40px 0;
+}
+
+/* Minimalist Inline Form Editor Backdrop Overlay */
+.edit-modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(15, 23, 42, 0.3);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.modal-card {
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 500px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+.modal-card h3 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-size: 20px;
+}
+
+.modal-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.modal-form label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #64748b;
+}
+
+.modal-form input {
+  padding: 10px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.save-btn {
+  background-color: #8CEE00;
+  color: black;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.cancel-btn {
+  background-color: #e2e8f0;
+  color: #334155;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+}

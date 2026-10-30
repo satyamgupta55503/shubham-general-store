@@ -1,0 +1,8 @@
+node_modules/
+.next/
+.DS_Store
+*.zip
+
+# Local dev env — has localhost URLs, never push
+.env.local
+.env*.local

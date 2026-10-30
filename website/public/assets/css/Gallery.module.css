@@ -1,0 +1,112 @@
+.cardsContainer {
+  position: relative;
+  width: 80vw;
+  height: 80vw;
+  max-width: 600px;
+  max-height: 600px;
+  padding: 2rem;
+}
+
+.cards {
+  position: absolute;
+  inset: 2rem;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 1px solid #666;
+  transition: transform 0.3s ease-in-out;
+}
+
+.labelsContainer {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.yearLabel {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  text-align: center;
+  color: #666;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: color 0.2s ease-in-out;
+}
+
+.yearLabel:hover,
+.yearLabel.active {
+  color: steelblue;
+}
+
+.yearLabel::before {
+  content: "";
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #666;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.yearLabel.active::before {
+  background-color: steelblue;
+}
+
+.yearLabel.active::after {
+  content: "";
+  position: absolute;
+  top: -25px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 2px;
+  height: 20px;
+  background-color: steelblue;
+  transition: height 0.3s ease-in-out;
+}
+
+.cardContent {
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  transition: transform 0.3s ease-in-out;
+}
+
+@media (min-width: 768px) {
+  .cardsContainer {
+    width: 60vw;
+    height: 60vw;
+    max-width: 800px;
+    max-height: 800px;
+  }
+
+  .yearLabel {
+    width: 60px;
+    height: 60px;
+    font-size: 1.2rem;
+  }
+
+  .yearLabel::before {
+    width: 15px;
+    height: 15px;
+  }
+
+  .yearLabel.active::after {
+    height: 30px;
+  }
+
+  .cardContent {
+    top: 30%;
+  }
+}
+
+@media (min-width: 1200px) {
+  .yearLabel {
+    width: 70px;
+    height: 70px;
+    font-size: 1.4rem;
+  }
+}

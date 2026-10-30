@@ -1,0 +1,269 @@
+.speedometerContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 2rem;
+  background-color: #0f0f0f;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  color: #ffffff;
+}
+
+.speedometerWrapper {
+  position: relative;
+  width: 500px;
+  height: 300px;
+  margin-bottom: 2rem;
+}
+
+.speedometerBg {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: #1a1a1a;
+  border-radius: 250px 250px 0 0;
+  overflow: hidden;
+}
+
+.speedometerArc {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  height: 90%;
+  border: 2px solid #4a9eff;
+  border-bottom: none;
+  border-radius: 50% 50% 0 0;
+  opacity: 0.3;
+}
+
+.speedometerArc::before {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 70%;
+  height: 70%;
+  border: 1px solid #4a9eff;
+  border-bottom: none;
+  border-radius: 50% 50% 0 0;
+  opacity: 0.5;
+}
+
+.centerPoint {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 8px;
+  height: 8px;
+  background-color: #4a9eff;
+  border-radius: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
+}
+
+.needle {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform-origin: bottom center;
+  transform: translateX(-50%) rotate(0deg);
+  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 15;
+}
+
+.needleLine {
+  width: 2px;
+  height: 35%;
+  background-color: #4a9eff;
+  border-radius: 1px;
+  box-shadow: 0 0 8px rgba(74, 158, 255, 0.6);
+}
+
+/* Year-specific needle rotations for 6 years (36° intervals) */
+.year2025 {
+  transform: translateX(-50%) rotate(0deg);
+}
+
+.year2024 {
+  transform: translateX(-50%) rotate(-36deg);
+}
+
+.year2023 {
+  transform: translateX(-50%) rotate(-72deg);
+}
+
+.year2022 {
+  transform: translateX(-50%) rotate(-108deg);
+}
+
+.year2021 {
+  transform: translateX(-50%) rotate(-144deg);
+}
+
+.year2020 {
+  transform: translateX(-50%) rotate(-180deg);
+}
+
+.yearMarker {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+.yearMarker:hover {
+  transform: translate(-50%, -50%) scale(1.1);
+}
+
+.markerDot {
+  width: 12px;
+  height: 12px;
+  background-color: #555555;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  margin: 0 auto 8px;
+}
+
+.yearMarker.active .markerDot {
+  background-color: #4a9eff;
+  box-shadow: 0 0 15px rgba(74, 158, 255, 0.6);
+  transform: scale(1.2);
+}
+
+.markerLabel {
+  font-size: 14px;
+  font-weight: 500;
+  color: #666666;
+  text-align: center;
+  transition: color 0.3s ease;
+  white-space: nowrap;
+}
+
+.yearMarker.active .markerLabel {
+  color: #4a9eff;
+  font-weight: 600;
+}
+
+.digitalDisplay {
+  position: absolute;
+  bottom: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #1a1a1a;
+  border: 1px solid #333;
+  padding: 8px 20px;
+  border-radius: 6px;
+  font-family: "Courier New", monospace;
+  font-size: 24px;
+  font-weight: bold;
+  color: #4a9eff;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.contentSection {
+  text-align: center;
+  max-width: 600px;
+  animation: fadeIn 0.4s ease-out;
+}
+
+.contentText {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: #a0a0a0;
+  margin: 0;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.yearMarker.active {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.05);
+  }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .speedometerWrapper {
+    width: 400px;
+    height: 240px;
+    margin-bottom: 1.5rem;
+  }
+
+  .markerDot {
+    width: 10px;
+    height: 10px;
+  }
+
+  .markerLabel {
+    font-size: 12px;
+  }
+
+  .digitalDisplay {
+    font-size: 20px;
+    padding: 6px 16px;
+  }
+
+  .contentSection {
+    padding: 0 1rem;
+  }
+
+  .contentText {
+    font-size: 1rem;
+  }
+
+  .speedometerContainer {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .speedometerWrapper {
+    width: 320px;
+    height: 192px;
+  }
+
+  .markerDot {
+    width: 8px;
+    height: 8px;
+  }
+
+  .markerLabel {
+    font-size: 11px;
+  }
+
+  .digitalDisplay {
+    font-size: 18px;
+    padding: 4px 12px;
+  }
+
+  .needleLine {
+    width: 2px;
+  }
+
+  .centerPoint {
+    width: 6px;
+    height: 6px;
+  }
+}

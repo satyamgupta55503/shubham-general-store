@@ -1,0 +1,299 @@
+/* ─────────────────────────────────────────
+   Asidebar.css – Light Green + White Theme
+───────────────────────────────────────── */
+
+.sidebar-container {
+  width: 15rem;
+  height: 100vh;
+  background-color: #ffffff;
+  border-right: 1px solid #e5e7eb;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  font-family: 'Inter', -apple-system, sans-serif;
+  overflow: hidden; /* outer container stays fixed */
+}
+
+.logo-section {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 20px 20px 16px;
+  border-bottom: 1px solid #f1f5f9;
+  margin-bottom: 8px;
+  flex-shrink: 0;
+}
+
+.logo-icon-box {
+  width: 32px;
+  height: 32px;
+  background-color: #8ce600;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.logo-text img {
+  height: 30px;
+  object-fit: contain;
+  display: block;
+}
+
+.section-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #9ca3af;
+  padding: 8px 20px 4px;
+  margin: 0;
+  flex-shrink: 0;
+}
+
+.role-switcher {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 20px;
+  margin-bottom: 6px;
+  flex-shrink: 0;
+}
+
+.role-switcher-label {
+  font-size: 11px;
+  color: #6b7280;
+  font-weight: 600;
+}
+
+.role-select {
+  appearance: none;
+  border: 1px solid #e5e7eb;
+  background: #ffffff;
+  padding: 6px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+  color: #374151;
+}
+
+/* ── Scrollable middle section ── */
+.nav-scroll-area {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  /* Custom scrollbar */
+  scrollbar-width: thin;
+  scrollbar-color: #d1fae5 transparent;
+}
+
+.nav-scroll-area::-webkit-scrollbar {
+  width: 4px;
+}
+
+.nav-scroll-area::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.nav-scroll-area::-webkit-scrollbar-thumb {
+  background-color: #d1fae5;
+  border-radius: 4px;
+}
+
+.nav-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 0 10px;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-size: 13.5px;
+  font-weight: 500;
+  line-height: 1;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.nav-link.active {
+  background: linear-gradient(135deg, #8ce600, #7acc00);
+  color: #1a2e05;
+  box-shadow: 0 2px 8px rgba(140, 230, 0, 0.25);
+}
+
+.nav-link.active .icon-wrapper { color: #1a2e05; }
+
+.nav-link.inactive { color: #6b7280; }
+.nav-link.inactive .icon-wrapper { color: #9ca3af; }
+
+.nav-link.inactive:hover {
+  background-color: #f0fdf4;
+  color: #15803d;
+}
+
+.nav-link.inactive:hover .icon-wrapper { color: #16a34a; }
+
+.icon-wrapper {
+  width: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: color 0.2s ease;
+}
+
+.nav-icon { display: block; }
+
+.link-text {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.nav-badge {
+  font-size: 10px;
+  font-weight: 600;
+  background: #ef4444;
+  color: #ffffff;
+  border-radius: 10px;
+  padding: 1px 6px;
+  line-height: 1.6;
+  flex-shrink: 0;
+}
+
+.sidebar-spacer { flex: 1; min-height: 16px; }
+
+.sidebar-divider {
+  border: none;
+  border-top: 1px solid #f1f5f9;
+  margin: 8px 10px;
+  flex-shrink: 0;
+}
+
+.bottom-nav {
+  margin-bottom: 8px;
+}
+
+.profile-section {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px 16px;
+  margin: 8px 10px 0;
+  border-top: 1px solid #f1f5f9;
+  flex-shrink: 0;
+}
+
+.profile-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: #8ce600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  color: #1a2e05;
+  flex-shrink: 0;
+}
+
+.profile-details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.profile-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.profile-role {
+  font-size: 11px;
+  color: #9ca3af;
+  margin: 0;
+}
+
+.logout-btn {
+  background: none;
+  border: none;
+  padding: 5px;
+  border-radius: 6px;
+  color: #9ca3af;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+
+.logout-btn:hover {
+  background-color: #fee2e2;
+  color: #dc2626;
+}
+
+/* ─────────────────────────────────────────
+   RESPONSIVE — Mobile sidebar (≤ 1024px)
+───────────────────────────────────────── */
+
+/* Backdrop overlay (shown when sidebar open on mobile) */
+.admin-sidebar-backdrop {
+  display: none;
+}
+
+@media (max-width: 1024px) {
+  /* Sidebar becomes a slide-in drawer */
+  .sidebar-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1200;
+    width: 16rem;
+    max-width: 85vw;
+    transform: translateX(-100%);
+    transition: transform 0.28s ease;
+    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.12);
+  }
+
+  .sidebar-container.sidebar-open {
+    transform: translateX(0);
+  }
+
+  /* Backdrop visible when open */
+  .admin-sidebar-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 1100;
+    background: rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(2px);
+  }
+
+  /* Show the close button inside the drawer */
+  .sidebar-close-btn {
+    display: flex !important;
+  }
+}
+
+/* On desktop the backdrop and close button never show */
+@media (min-width: 1025px) {
+  .admin-sidebar-backdrop { display: none !important; }
+  .sidebar-close-btn      { display: none !important; }
+}

@@ -1,0 +1,196 @@
+.timelineContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  /* min-height: 100vh; */
+  padding: 2rem;
+  /* background-color: #0f0f0f; */
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  color: #ffffff;
+}
+
+/* Half-circle timeline container (arc at bottom) */
+.halfCircularTimeline {
+  position: relative;
+  margin-bottom: 3rem;
+}
+
+/* Center point at bottom center */
+.centerPoint {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background-color: #8ee013;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  box-shadow: 0 0 20px rgba(74, 158, 255, 0.5);
+  animation: pulseCenter 2s infinite ease-in-out;
+}
+
+/* Connection line from center, length matches radius */
+.connectionLine {
+  position: absolute;
+  width: 4px;
+  background-color: #8ee013;
+  transform-origin: bottom center;
+  transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  z-index: 5;
+  pointer-events: none;
+}
+
+.yearMarker {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 15;
+  pointer-events: auto;
+}
+
+.yearMarker:hover {
+  transform: translate(-50%, -50%) scale(1.1);
+}
+
+.markerDot {
+  width: 18px;
+  height: 18px;
+  background-color: #555555;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  margin: 0 auto 8px;
+  pointer-events: auto;
+}
+
+.yearMarker.active .markerDot {
+  background-color: #8ee013;
+  box-shadow: 0 0 15px rgba(74, 158, 255, 0.6);
+  transform: scale(1.2);
+}
+
+.markerLabel {
+  font-size: 18px;
+  font-weight: 500;
+  color: #666666;
+  text-align: center;
+  transition: color 0.3s ease;
+  white-space: nowrap;
+  user-select: none;
+  pointer-events: auto;
+}
+
+.yearMarker.active .markerLabel {
+  color: #8ee013;
+  font-weight: 600;
+}
+
+.contentSection {
+  text-align: center;
+  max-width: 700px;
+  animation: fadeInContent 0.6s ease-out;
+}
+
+.yearDisplay {
+  font-size: 3rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.02em;
+}
+
+.contentTitle {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #8ee013;
+  margin-bottom: 1rem;
+  margin-top: 0.5rem;
+}
+
+.contentText {
+  font-size: 1.2rem;
+  line-height: 1.6;
+  color: #a0a0a0;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Animations */
+@keyframes fadeInContent {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulseCenter {
+  0%,
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    box-shadow: 0 0 20px rgba(74, 158, 255, 0.5);
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.2);
+    box-shadow: 0 0 30px rgba(74, 158, 255, 0.7);
+  }
+}
+
+.yearMarker.active {
+  animation: pulseMarker 2s infinite ease-in-out;
+}
+
+@keyframes pulseMarker {
+  0%,
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.05);
+  }
+}
+
+/* Responsive design */
+@media (max-width: 900px) {
+  .halfCircularTimeline {
+    width: 100vw !important;
+    min-width: 0;
+    max-width: 100vw;
+  }
+  .contentSection {
+    max-width: 90vw;
+  }
+}
+@media (max-width: 768px) {
+  .halfCircularTimeline {
+    width: 98vw !important;
+    height: 200px !important;
+    margin-bottom: 2rem;
+  }
+  .centerPoint {
+    width: 14px;
+    height: 14px;
+  }
+  .connectionLine {
+    width: 3px;
+  }
+  .markerDot {
+    width: 12px;
+    height: 12px;
+  }
+  .markerLabel {
+    font-size: 14px;
+  }
+  .yearDisplay {
+    font-size: 2rem;
+  }
+  .contentTitle {
+    font-size: 1rem;
+  }
+  .contentText {
+    font-size: 0.9rem;
+  }
+}
