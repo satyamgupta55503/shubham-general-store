@@ -5,8 +5,9 @@ const adminProtect               = require("../../middleware/authMiddleware");
 const { protect: custProtect }   = require("../../middleware/customerAuth");
 
 // Public
-router.get("/",          ctrl.getProducts);
-router.get("/:slug",     ctrl.getProductBySlug);
+router.get("/",              ctrl.getProducts);
+router.get("/:slug/related", ctrl.getRelatedProducts);
+router.get("/:slug",         ctrl.getProductBySlug);
 
 // Customer — review
 router.post("/:id/review", custProtect, ctrl.addReview);

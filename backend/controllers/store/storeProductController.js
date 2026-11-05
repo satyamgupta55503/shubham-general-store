@@ -72,6 +72,75 @@ exports.getProductBySlug = async (req, res) => {
   }
 };
 
+// GET /api/store/products/:slug/related
+// "You may also like" — same category first, then fill with featured/best-sellers.
+exports.getRelatedProducts = async (req, res) => {
+  try {
+    const limit = Math.min(Number(req.query.limit) || 8, 20);
+    const current = await Product.findOne({ slug: req.params.slug, isActive: true }).select("_id category");
+    if (!current) return res.status(404).json({ success: false, message: "Product not found" });
+
+    const selectFields = "-reviews -__v";
+    const results = [];
+    const seen = new Set([String(current._id)]);
+
+    const pushUnique = (list) => {
+      for (const p of list) {
+        const id = String(p._id);
+        if (seen.has(id)) continue;
+        seen.add(id);
+        results.push(p);
+        if (results.length >= limit) break;
+      }
+    };
+
+    // 1) Same category (excluding current)
+    if (current.category) {
+      const sameCat = await Product.find({
+        category: current.category,
+        isActive: true,
+        _id: { $ne: current._id },
+      })
+        .populate("category", "name slug color icon")
+        .sort({ isBestSeller: -1, isFeatured: -1, createdAt: -1 })
+        .limit(limit)
+        .select(selectFields);
+      pushUnique(sameCat);
+    }
+
+    // 2) Fill remaining with featured / best-sellers from the whole store
+    if (results.length < limit) {
+      const fillers = await Product.find({
+        isActive: true,
+        _id: { $nin: Array.from(seen) },
+        $or: [{ isFeatured: true }, { isBestSeller: true }, { isNewArrival: true }],
+      })
+        .populate("category", "name slug color icon")
+        .sort({ createdAt: -1 })
+        .limit(limit - results.length)
+        .select(selectFields);
+      pushUnique(fillers);
+    }
+
+    // 3) Still short? fill with any active products
+    if (results.length < limit) {
+      const anyProducts = await Product.find({
+        isActive: true,
+        _id: { $nin: Array.from(seen) },
+      })
+        .populate("category", "name slug color icon")
+        .sort({ createdAt: -1 })
+        .limit(limit - results.length)
+        .select(selectFields);
+      pushUnique(anyProducts);
+    }
+
+    res.json({ success: true, data: results });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+
 // POST /api/store/products/:id/review  (customer must be logged in)
 exports.addReview = async (req, res) => {
   try {

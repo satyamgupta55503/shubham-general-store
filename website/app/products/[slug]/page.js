@@ -8,6 +8,7 @@ import StoreLayout            from "@/components/store/layout/StoreLayout";
 import JsonLd                 from "@/components/store/seo/JsonLd";
 import BreadcrumbJsonLd       from "@/components/store/seo/BreadcrumbJsonLd";
 import ProductDetailClient    from "./_ProductDetailClient";
+import RelatedProducts        from "@/components/store/RelatedProducts";
 
 const API      = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:5000";
 const BASE_URL = "https://www.subhamgeneralstore.com";
@@ -111,6 +112,11 @@ export default async function ProductPage({ params }) {
       <BreadcrumbJsonLd items={breadcrumbs} />
       {/* Pass server-fetched product to the interactive client component */}
       <ProductDetailClient product={product} />
+
+      {/* "You May Also Like" — related products (YouTube-style) */}
+      <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 20px 40px" }}>
+        <RelatedProducts slug={product.slug} />
+      </div>
     </StoreLayout>
   );
 }
