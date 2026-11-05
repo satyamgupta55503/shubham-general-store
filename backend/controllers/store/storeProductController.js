@@ -72,6 +72,41 @@ exports.getProductBySlug = async (req, res) => {
   }
 };
 
+// GET /api/store/products/suggest?q=...
+// Amazon-style live search suggestions — fast partial (prefix/substring) match.
+// Returns matching products (with slug, thumbnail, price, category) + matching categories.
+exports.suggest = async (req, res) => {
+  try {
+    const q = (req.query.q || "").trim();
+    if (q.length < 1) return res.json({ success: true, data: { products: [], categories: [] } });
+
+    // Escape regex special chars so user input can't break the query
+    const safe = q.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const rx = new RegExp(safe, "i");
+
+    const Category = require("../../models/store/GroceryCategory");
+
+    const [products, categories] = await Promise.all([
+      Product.find({
+        isActive: true,
+        $or: [{ name: rx }, { shortDesc: rx }, { brand: rx }, { tags: rx }],
+      })
+        .populate("category", "name slug")
+        .sort({ isBestSeller: -1, isFeatured: -1 })
+        .limit(8)
+        .select("name slug thumbnail price salePrice category unit packSize stockQty"),
+      Category.find({ isActive: true, name: rx })
+        .sort({ sortOrder: 1 })
+        .limit(4)
+        .select("name slug color icon"),
+    ]);
+
+    res.json({ success: true, data: { products, categories } });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+
 // GET /api/store/products/:slug/related
 // "You may also like" — same category first, then fill with featured/best-sellers.
 exports.getRelatedProducts = async (req, res) => {

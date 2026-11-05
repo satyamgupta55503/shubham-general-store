@@ -6,6 +6,7 @@ const { protect: custProtect }   = require("../../middleware/customerAuth");
 
 // Public
 router.get("/",              ctrl.getProducts);
+router.get("/suggest",       ctrl.suggest);          // Amazon-style live search (must precede /:slug)
 router.get("/:slug/related", ctrl.getRelatedProducts);
 router.get("/:slug",         ctrl.getProductBySlug);
 

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
 import { useCart }         from "@/context/CartContext";
 import { useCustomerAuth } from "@/context/CustomerAuthContext";
+import SmartSearch         from "@/components/store/SmartSearch";
 import toast               from "react-hot-toast";
 
 const NAV_LINKS = [
@@ -131,42 +132,10 @@ export default function StoreNavbar({ promoBar }) {
             </div>
           </Link>
 
-          {/* ── Desktop search ── */}
-          <form onSubmit={handleSearch} role="search" aria-label="Search products" style={{
-            flex:       1,
-            maxWidth:   480,
-            display:    "flex",
-            background: "#f3f4f6",
-            borderRadius: 50,
-            overflow:   "hidden",
-            border:     `2px solid ${searchOpen ? "#16a34a" : "transparent"}`,
-            transition: "border .2s",
-          }} className="hide-mobile">
-            <input
-              ref={searchRef}
-              type="search"
-              placeholder="Search vegetables, fruits, dairy…"
-              value={query}
-              onChange={e => setQuery(e.target.value)}
-              onFocus={() => setSearchOpen(true)}
-              onBlur={() => setTimeout(() => setSearchOpen(false), 200)}
-              aria-label="Search products"
-              style={{
-                flex: 1, border: "none", outline: "none",
-                background: "transparent", padding: "9px 16px",
-                fontSize: 13, color: "#111827",
-              }}
-            />
-            <button type="submit" aria-label="Submit search" style={{
-              border: "none", background: "#16a34a", color: "#fff",
-              padding: "0 18px", cursor: "pointer", fontSize: 14,
-              display: "flex", alignItems: "center",
-            }}>
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true">
-                <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
-              </svg>
-            </button>
-          </form>
+          {/* ── Desktop search (Amazon-style live autocomplete) ── */}
+          <div className="hide-mobile" style={{ flex: 1, maxWidth: 480, display: "flex" }}>
+            <SmartSearch variant="desktop" />
+          </div>
 
           {/* ── Desktop nav links ── */}
           <nav aria-label="Main navigation" style={{ display: "flex", gap: 2, alignItems: "center", flexShrink: 0 }} className="hide-mobile">
@@ -343,41 +312,14 @@ export default function StoreNavbar({ promoBar }) {
           </div>
         </nav>
 
-        {/* ── Mobile search bar (expand on tap) ── */}
+        {/* ── Mobile search bar (expand on tap) — Amazon-style live autocomplete ── */}
         {searchOpen && (
           <div className="show-mobile" style={{
             borderTop: "1px solid #e5e7eb",
             padding:   "10px 16px",
             background: "#fff",
           }}>
-            <form onSubmit={handleSearch} role="search" style={{
-              display: "flex", background: "#f3f4f6",
-              borderRadius: 50, overflow: "hidden",
-              border: "2px solid #16a34a",
-            }}>
-              <input
-                ref={searchRef}
-                type="search"
-                placeholder="Search groceries…"
-                value={query}
-                onChange={e => setQuery(e.target.value)}
-                aria-label="Search products"
-                style={{
-                  flex: 1, border: "none", outline: "none",
-                  background: "transparent", padding: "10px 16px",
-                  fontSize: 14,
-                }}
-              />
-              <button type="submit" aria-label="Search" style={{
-                border: "none", background: "#16a34a", color: "#fff",
-                padding: "0 18px", cursor: "pointer",
-                display: "flex", alignItems: "center",
-              }}>
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true">
-                  <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
-                </svg>
-              </button>
-            </form>
+            <SmartSearch variant="mobile" onNavigate={() => setSearchOpen(false)} />
           </div>
         )}
 
