@@ -6,6 +6,7 @@ import {
   LayoutDashboard, Users, Briefcase, FileText, Receipt,
   CreditCard, Package, UserCheck, MessageSquare,
   History, Bell, Settings, X, TrendingUp, PhoneCall, BarChart2, BookOpen,
+  ShoppingCart,
 } from "lucide-react";
 
 const NAV_SECTIONS = [
@@ -23,6 +24,7 @@ const NAV_SECTIONS = [
     items: [
       { id:"proposals",  label:"Proposals",        href:"/crm/dashboard/proposals",     icon:FileText,        roles:["owner","manager","executive"] },
       { id:"quotations", label:"Quotations",       href:"/crm/dashboard/quotations",    icon:Receipt,         roles:["owner","manager"] },
+      { id:"orders",     label:"Order Sheets",     href:"/crm/dashboard/orders",        icon:ShoppingCart,    roles:["owner","manager"] },
       { id:"invoices",   label:"Invoices",         href:"/crm/dashboard/invoices",      icon:FileText,        roles:["owner","manager","accountant"] },
       { id:"payments",   label:"Payments",         href:"/crm/dashboard/payments",      icon:CreditCard,      roles:["owner","manager","accountant"] },
       { id:"ledger",     label:"Ledger / Khata",   href:"/crm/dashboard/ledger",        icon:BookOpen,        roles:["owner","manager","accountant"] },

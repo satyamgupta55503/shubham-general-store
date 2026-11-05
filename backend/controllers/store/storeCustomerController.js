@@ -398,17 +398,45 @@ exports.getMyInvoice = async (req, res) => {
   }
 };
 
-// GET /api/store/customers/admin/sent-documents  (adminProtect) — all sent quotations + invoices for CMS
+// GET /api/store/customers/me/order-sheets  (protected) — SENT order sheets for this customer
+exports.getMyOrderSheets = async (req, res) => {
+  try {
+    const CrmOrderSheet = require("../../models/crm/CrmOrderSheet");
+    const sheets = await CrmOrderSheet.find({ store_customer: req.customer.id, "send.sent": true })
+      .sort({ "send.sentAt": -1 });
+    res.json({ success: true, data: sheets });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+
+// GET /api/store/customers/me/order-sheets/:id  (protected) — single sent order sheet
+exports.getMyOrderSheet = async (req, res) => {
+  try {
+    const CrmOrderSheet = require("../../models/crm/CrmOrderSheet");
+    const sheet = await CrmOrderSheet.findOne({ _id: req.params.id, store_customer: req.customer.id, "send.sent": true });
+    if (!sheet) return res.status(404).json({ success: false, message: "Order not found" });
+    res.json({ success: true, data: sheet });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+
+// GET /api/store/customers/admin/sent-documents  (adminProtect) — all sent quotations + invoices + order sheets for CMS
 exports.adminGetSentDocuments = async (req, res) => {
   try {
-    const CrmQuotation = require("../../models/crm/CrmQuotation");
-    const CrmInvoice   = require("../../models/crm/CrmInvoice");
+    const CrmQuotation  = require("../../models/crm/CrmQuotation");
+    const CrmInvoice    = require("../../models/crm/CrmInvoice");
+    const CrmOrderSheet = require("../../models/crm/CrmOrderSheet");
 
-    const [quotes, invoices] = await Promise.all([
+    const [quotes, invoices, orders] = await Promise.all([
       CrmQuotation.find({ "send.sent": true })
         .populate("store_customer", "name email phone customerType businessName")
         .sort({ "send.sentAt": -1 }),
       CrmInvoice.find({ "send.sent": true })
+        .populate("store_customer", "name email phone customerType businessName")
+        .sort({ "send.sentAt": -1 }),
+      CrmOrderSheet.find({ "send.sent": true })
         .populate("store_customer", "name email phone customerType businessName")
         .sort({ "send.sentAt": -1 }),
     ]);
@@ -416,7 +444,7 @@ exports.adminGetSentDocuments = async (req, res) => {
     const map = (d, kind) => ({
       _id: d._id,
       kind,
-      number: kind === "quotation" ? d.quote_number : d.invoice_number,
+      number: kind === "quotation" ? d.quote_number : kind === "invoice" ? d.invoice_number : d.order_number,
       status: d.status,
       grandTotal: d.grand_total,
       customer: d.store_customer,
@@ -429,6 +457,7 @@ exports.adminGetSentDocuments = async (req, res) => {
     const docs = [
       ...quotes.map(q => map(q, "quotation")),
       ...invoices.map(i => map(i, "invoice")),
+      ...orders.map(o => map(o, "order")),
     ].sort((a, b) => new Date(b.sentAt || 0) - new Date(a.sentAt || 0));
 
     res.json({ success: true, data: docs });

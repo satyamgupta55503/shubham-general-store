@@ -152,6 +152,7 @@ app.use("/api/crm/settings",      require("./routes/crm/crmSettingsRoutes"));
 app.use("/api/crm/followups",     require("./routes/crm/crmFollowUpRoutes"));
 app.use("/api/crm/reports",       require("./routes/crm/crmReportRoutes"));
 app.use("/api/crm/ledger",        require("./routes/crm/crmLedgerRoutes"));
+app.use("/api/crm/order-sheets",  require("./routes/crm/crmOrderSheetRoutes"));
 
 // ── HRM ─────────────────────────────────────────────────────────
 app.use("/api/hrm/auth",          require("./routes/hrm/hrmAuthRoutes"));

@@ -22,6 +22,8 @@ router.get ("/me/quotations",                 protect, ctrl.getMyQuotations);
 router.get ("/me/quotations/:id",             protect, ctrl.getMyQuotation);
 router.get ("/me/invoices",                   protect, ctrl.getMyInvoices);
 router.get ("/me/invoices/:id",               protect, ctrl.getMyInvoice);
+router.get ("/me/order-sheets",               protect, ctrl.getMyOrderSheets);
+router.get ("/me/order-sheets/:id",           protect, ctrl.getMyOrderSheet);
 
 // CRM integration — selector list of store customers (CRM auth)
 router.get ("/crm/list",                      crmAuth, ctrl.crmListCustomers);

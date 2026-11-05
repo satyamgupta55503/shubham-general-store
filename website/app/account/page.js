@@ -10,12 +10,13 @@ import toast from "react-hot-toast";
 const API = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:5000";
 
 const BASE_MENU = [
-  { href:"/account",            label:"My Profile"    },
-  { href:"/account/orders",     label:"My Orders"     },
-  { href:"/account/quotations", label:"My Quotations" },
-  { href:"/account/invoices",   label:"My Invoices"   },
-  { href:"/account/addresses",  label:"Addresses"     },
-  { href:"/account/wishlist",   label:"Wishlist"      },
+  { href:"/account",             label:"My Profile"    },
+  { href:"/account/orders",      label:"My Orders"     },
+  { href:"/account/order-sheets",label:"Order Sheets"  },
+  { href:"/account/quotations",  label:"My Quotations" },
+  { href:"/account/invoices",    label:"My Invoices"   },
+  { href:"/account/addresses",   label:"Addresses"     },
+  { href:"/account/wishlist",    label:"Wishlist"      },
 ];
 
 export default function AccountPage() {
