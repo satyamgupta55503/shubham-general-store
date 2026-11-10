@@ -46,6 +46,7 @@ const buildOrganizationSchema = (contact = {}) => ({
     },
   } : {}),
   ...(contact.hours ? { openingHours: contact.hours } : {}),
+  areaServed: { "@type": "Country", name: "India" },   // serves customers everywhere, not one town
   priceRange: "₹",
 });
 

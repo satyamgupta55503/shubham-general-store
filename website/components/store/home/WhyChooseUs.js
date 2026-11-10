@@ -46,7 +46,7 @@ const FEATURES = [
   { icon: Icons.tag,    title: "Best Prices",          desc: "Competitive rates on daily kirana items. Bigger quantity means better thok pricing.",                           color: "#ea580c", cls: "why-orange" },
   { icon: Icons.shield, title: "Quality Guaranteed",   desc: "Every item is checked before packing. If something is damaged or wrong, tell us and we will sort it out.",                      color: "#7c3aed", cls: "why-purple" },
   { icon: Icons.phone,  title: "Easy Ordering",        desc: "Order in seconds from your mobile or desktop. Track your order live with real-time updates.",                      color: "#0891b2", cls: "why-cyan"   },
-  { icon: Icons.users,  title: "Local & Trusted",       desc: "Subham General Store is a local kirana and wholesale seller serving homes and shops in Chirmiri.",                              color: "#d97706", cls: "why-amber"  },
+  { icon: Icons.users,  title: "Trusted Everywhere",    desc: "Subham General Store is a kirana and wholesale seller serving homes and shops everywhere, not just one area.",                              color: "#d97706", cls: "why-amber"  },
 ];
 
 export default function WhyChooseUs() {

@@ -33,9 +33,9 @@ export const metadata = {
     template: "%s | Subham General Store",
   },
   description:
-    "Subham General Store — kirana and wholesale (thok) + retail (footkar) seller in Chirmiri. Biscuits, namkeen, salt, home care, personal care and daily essentials from top brands at best prices.",
+    "Subham General Store — kirana and wholesale (thok) + retail (footkar) seller for homes and shops everywhere. Biscuits, namkeen, salt, home care, personal care and daily essentials from top brands at best prices.",
   keywords: [
-    "Subham General Store","online kirana","kirana wholesale","thok vikreta","footkar vikreta","Chirmiri",
+    "Subham General Store","online kirana","kirana wholesale","thok vikreta","footkar vikreta","kirana online India",
     "wholesale grocery","FMCG dealer","biscuits namkeen wholesale","daily essentials",
     "grocery store","subham gupta store","online kirana",
   ],

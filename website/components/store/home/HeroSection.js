@@ -12,7 +12,7 @@ const API = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:5000";
 const FALLBACK_SLIDES = [{
   tag: "किराना  •  फुटकर  •  थोक",
   title: "घर हो या दुकान,\nहर सामान\nसही दाम पर",
-  description: "बिस्किट, नमकीन, नमक, साबुन-सर्फ और रोज़ की ज़रूरत का हर सामान — फुटकर और थोक दोनों रेट पर।\nRetail & wholesale kirana from trusted brands, Chirmiri.",
+  description: "बिस्किट, नमकीन, नमक, साबुन-सर्फ और रोज़ की ज़रूरत का हर सामान — फुटकर और थोक दोनों रेट पर।\nRetail & wholesale kirana from trusted brands, for every city and town.",
   image: "",
   accent: "#16a34a",
   bgGradient: "linear-gradient(135deg,#f0fdf4 0%,#dcfce7 55%,#bbf7d0 100%)",
