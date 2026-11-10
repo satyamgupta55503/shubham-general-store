@@ -7,6 +7,7 @@ import ProductCard             from "@/components/store/ui/ProductCard";
 import { useCart }             from "@/context/CartContext";
 import { useCustomerAuth }     from "@/context/CustomerAuthContext";
 import toast                   from "react-hot-toast";
+import { mediaUrl, optimizedImage } from "@/utils/mediaUrl";
 
 const API = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:5000";
 
@@ -112,7 +113,7 @@ export default function ProductDetailClient({ product: initial }) {
               </span>
             )}
             {images[selImg] ? (
-              <img src={`${API}/${images[selImg]}`} alt={product.name}
+              <img src={optimizedImage(images[selImg], 900)} alt={product.name}
                 style={{ width: "100%", height: "100%", objectFit: "contain", padding: 20 }}
                 loading="eager" fetchPriority="high"
               />
@@ -137,7 +138,7 @@ export default function ProductDetailClient({ product: initial }) {
                   border: selImg === i ? "2px solid #16a34a" : "2px solid #e5e7eb",
                   overflow: "hidden", background: "#f9fafb",
                 }}>
-                  <img src={`${API}/${img}`} alt={`${product.name} ${i + 1}`} style={{ width: "100%", height: "100%", objectFit: "cover" }} loading="lazy" />
+                  <img src={optimizedImage(img, 140)} alt={`${product.name} ${i + 1}`} style={{ width: "100%", height: "100%", objectFit: "cover" }} loading="lazy" />
                 </button>
               ))}
             </div>
@@ -163,9 +164,24 @@ export default function ProductDetailClient({ product: initial }) {
             {product.name}
           </h1>
 
-          {product.brand && (
+          {(product.brandRef?.name || product.brand) && (
             <p style={{ fontSize: 13, color: "#6b7280", margin: "0 0 10px" }}>
-              Brand: <strong style={{ color: "#374151" }}>{product.brand}</strong>
+              Brand:{" "}
+              {product.brandRef?.slug ? (
+                <>
+                  <Link href={`/brands/${product.brandRef.slug}${product.brandLine ? `?line=${product.brandLine}` : ""}`}
+                    style={{ color: product.brandRef.color || "#16a34a", fontWeight: 800, textDecoration: "none" }}>
+                    {product.brandRef.name}
+                  </Link>
+                  {product.brandRef.isDealer && (
+                    <span style={{ marginLeft: 8, fontSize: 11, fontWeight: 800, color: "#15803d", background: "#f0fdf4", border: "1px solid #bbf7d0", padding: "2px 9px", borderRadius: 50 }}>
+                      Authorised dealer
+                    </span>
+                  )}
+                </>
+              ) : (
+                <strong style={{ color: "#374151" }}>{product.brand}</strong>
+              )}
             </p>
           )}
 
@@ -308,6 +324,39 @@ export default function ProductDetailClient({ product: initial }) {
         {tab === "desc" && (
           <div style={{ fontSize: 15, color: "#374151", lineHeight: 1.85, maxWidth: 680 }}>
             {product.description || "No description available."}
+
+            {/* Product video (uploaded by admin) */}
+            {product.video && (
+              <div style={{ marginTop: 22 }}>
+                <video
+                  src={mediaUrl(product.video)}
+                  controls
+                  preload="metadata"
+                  playsInline
+                  style={{ width: "100%", maxWidth: 560, borderRadius: 14, background: "#000" }}
+                />
+              </div>
+            )}
+
+            {/* PDF brochure / spec sheet */}
+            {product.brochure && (
+              <a
+                href={mediaUrl(product.brochure)}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: "inline-flex", alignItems: "center", gap: 8, marginTop: 18,
+                  padding: "10px 18px", borderRadius: 50, background: "#f0fdf4",
+                  border: "1px solid #bbf7d0", color: "#15803d", fontWeight: 700,
+                  fontSize: 14, textDecoration: "none",
+                }}
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><polyline points="14 2 14 8 20 8" />
+                </svg>
+                Download brochure (PDF)
+              </a>
+            )}
           </div>
         )}
 

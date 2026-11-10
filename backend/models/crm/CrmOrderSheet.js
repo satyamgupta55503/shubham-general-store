@@ -57,11 +57,11 @@ const crmOrderSheetSchema = new mongoose.Schema(
 );
 
 // Recompute totals before save
-crmOrderSheetSchema.pre('save', function (next) {
+// (Mongoose 9: hooks must not take/call `next`)
+crmOrderSheetSchema.pre('save', function () {
   const items = this.items || [];
   this.total_quantity = items.reduce((s, i) => s + (Number(i.quantity) || 0), 0);
   this.grand_total = items.reduce((s, i) => s + (Number(i.quantity) || 0) * (Number(i.price) || 0), 0);
-  next();
 });
 
 crmOrderSheetSchema.set('toJSON', {

@@ -2,7 +2,7 @@ const express  = require("express");
 const router   = express.Router();
 const ctrl     = require("../../controllers/store/storeHomepageController");
 const adminProtect = require("../../middleware/authMiddleware");
-const upload   = require("../../middleware/upload");
+const media    = require("../../middleware/mediaUpload");
 
 // Public — fetch homepage content
 router.get("/", ctrl.getHomepage);
@@ -11,6 +11,6 @@ router.get("/", ctrl.getHomepage);
 router.put("/admin", adminProtect, ctrl.updateHomepage);
 
 // Admin — upload a single image (field name: "image")
-router.post("/admin/upload", adminProtect, upload.single("image"), ctrl.uploadImage);
+router.post("/admin/upload", adminProtect, media.single("image"), ctrl.uploadImage);
 
 module.exports = router;

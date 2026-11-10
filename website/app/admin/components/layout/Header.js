@@ -25,7 +25,13 @@ const Header = ({ onMenuToggle }) => {
     try {
       const controller = new AbortController();
       const tid = setTimeout(() => controller.abort(), 5000);
-      const response = await fetch(API_URL, { signal: controller.signal });
+      // Enquiries contain customers' contact details, so the API needs the admin token
+      const token = localStorage.getItem("token");
+      if (!token) return;
+      const response = await fetch(API_URL, {
+        signal: controller.signal,
+        headers: { Authorization: `Bearer ${token}` },
+      });
       clearTimeout(tid);
       if (!response.ok) return;
       const data = await response.json();

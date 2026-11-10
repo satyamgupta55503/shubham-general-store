@@ -3,6 +3,8 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import axios from "axios";
 
+import { optimizedImage } from "@/utils/mediaUrl";
+
 const API = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:5000";
 
 const FALLBACK = [
@@ -50,7 +52,7 @@ export default function OfferBanners({ initialData }) {
                 {o.image && (
                   <div style={{
                     position: "absolute", inset: 0,
-                    backgroundImage: `url(${API}/${o.image})`,
+                    backgroundImage: `url(${optimizedImage(o.image, 800)})`,
                     backgroundSize: "cover", backgroundPosition: "center",
                     opacity: .25, pointerEvents: "none",
                   }} />

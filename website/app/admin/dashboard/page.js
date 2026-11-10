@@ -317,7 +317,7 @@ const Dashboard = () => {
                           <div className="post-info">
                             {post.image || post.thumbnail ? (
                               <img
-                                src={`${UPLOADS_URL}/${post.image || post.thumbnail}`}
+                                src={/^https?:\/\//.test(post.image || post.thumbnail) ? (post.image || post.thumbnail) : `${UPLOADS_URL}/${post.image || post.thumbnail}`}
                                 alt={post.title}
                                 onError={(e) => { e.target.src = "https://placehold.co/60x60?text=Blog"; }}
                               />
@@ -404,7 +404,7 @@ const Dashboard = () => {
                           <div className="post-info">
                             {project.image || project.cover ? (
                               <img
-                                src={`${UPLOADS_URL}/${project.image || project.cover}`}
+                                src={/^https?:\/\//.test(project.image || project.cover) ? (project.image || project.cover) : `${UPLOADS_URL}/${project.image || project.cover}`}
                                 alt={project.title}
                                 onError={(e) => { e.target.src = "https://placehold.co/60x60?text=Project"; }}
                               />

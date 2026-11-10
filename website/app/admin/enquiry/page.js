@@ -1,219 +1,234 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
+
+const BACKEND = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:5000";
+const API_URL = BACKEND + "/api/enquiry";
+
+const TYPE_META = {
+  contact: { label: "Contact", bg: "#eff6ff", color: "#2563eb" },
+  career:  { label: "Job application", bg: "#f5f3ff", color: "#7c3aed" },
+  dealer:  { label: "Dealer", bg: "#fff7ed", color: "#ea580c" },
+};
+const typeOf = (e) => (TYPE_META[e.type] ? e.type : "contact"); // old records have no type
+
+const fmtDate = (d) =>
+  d ? new Date(d).toLocaleString("en-IN", { day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit", hour12: true }) : "";
 
 export default function EnquiryCMS() {
   const [enquiries, setEnquiries] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [selectedEnquiry, setSelectedEnquiry] = useState(null);
+  const [selected, setSelected] = useState(null);
   const [unreadIds, setUnreadIds] = useState([]);
+  const [tab, setTab] = useState("all");
 
-  const API_URL = (process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:5000") + "/api/enquiry";
-
-  const fetchEnquiries = async () => {
+  const fetchEnquiries = useCallback(async () => {
     setLoading(true);
     setError(null);
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 8000);
+    const timeoutId = setTimeout(() => controller.abort(), 10000);
     try {
-      const response = await fetch(`${API_URL}/send`, { signal: controller.signal });
+      const token = localStorage.getItem("token");
+      const response = await fetch(`${API_URL}/send`, {
+        signal: controller.signal,
+        headers: { Authorization: `Bearer ${token}` },
+      });
       clearTimeout(timeoutId);
+      if (response.status === 401) throw new Error("Session expired. Please log in again.");
       if (!response.ok) throw new Error("Failed to fetch data from backend");
       const data = await response.json();
-      
-      const fetchedData = Array.isArray(data) ? data : data.data || data.enquiries || [];
-      setEnquiries(fetchedData);
+      const list = Array.isArray(data) ? data : data.data || data.enquiries || [];
+      setEnquiries(list);
 
-      const readMessages = JSON.parse(localStorage.getItem("readEnquiries") || "[]");
-      const unread = fetchedData
-        .map((item) => item._id || item.id)
-        .filter((id) => !readMessages.includes(id));
-
-      setUnreadIds(unread);
+      const read = JSON.parse(localStorage.getItem("readEnquiries") || "[]");
+      setUnreadIds(list.map((i) => i._id || i.id).filter((id) => !read.includes(id)));
     } catch (err) {
       clearTimeout(timeoutId);
-      if (err.name === "AbortError") {
-        setError("Request timed out. Please try refreshing.");
-      } else {
-        setError(err.message);
-      }
+      setError(err.name === "AbortError" ? "Request timed out. Please try refreshing." : err.message);
       setEnquiries([]);
     } finally {
       setLoading(false);
     }
-  };
-
-  useEffect(() => {
-    fetchEnquiries();
   }, []);
 
-  // JAISE HI MESSAGE VIEW KARENGE TAB COUNTER MINUS HOGA AUR DOT GAYAB HO JAYEGA
-  const handleViewEnquiry = (enquiry) => {
-    const currentId = enquiry._id || enquiry.id;
-    setSelectedEnquiry(enquiry);
+  useEffect(() => { fetchEnquiries(); }, [fetchEnquiries]);
 
-    if (unreadIds.includes(currentId)) {
-      // Local state update karein
-      const updatedUnread = unreadIds.filter((id) => id !== currentId);
-      setUnreadIds(updatedUnread);
+  const counts = useMemo(() => {
+    const c = { all: enquiries.length, contact: 0, career: 0, dealer: 0 };
+    enquiries.forEach((e) => { c[typeOf(e)] += 1; });
+    return c;
+  }, [enquiries]);
 
-      // LocalStorage me save karein taaki refresh par wapas red dot na aaye
-      const readMessages = JSON.parse(localStorage.getItem("readEnquiries") || "[]");
-      if (!readMessages.includes(currentId)) {
-        readMessages.push(currentId);
-        localStorage.setItem("readEnquiries", JSON.stringify(readMessages));
+  const visible = useMemo(
+    () => (tab === "all" ? enquiries : enquiries.filter((e) => typeOf(e) === tab)),
+    [enquiries, tab]
+  );
+
+  // Viewing a message clears its unread dot and updates the header badge
+  const handleView = (enquiry) => {
+    const id = enquiry._id || enquiry.id;
+    setSelected(enquiry);
+    if (unreadIds.includes(id)) {
+      setUnreadIds((prev) => prev.filter((x) => x !== id));
+      const read = JSON.parse(localStorage.getItem("readEnquiries") || "[]");
+      if (!read.includes(id)) {
+        read.push(id);
+        localStorage.setItem("readEnquiries", JSON.stringify(read));
       }
-
-      // Live Trigger: Header component ko instant notify karne ke liye event fire karein
       window.dispatchEvent(new Event("cms_navigated"));
     }
   };
 
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this enquiry?")) return;
-
     try {
+      const token = localStorage.getItem("token");
       const response = await fetch(`${API_URL}/delete/${id}`, {
         method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` },
       });
-
-      if (response.ok) {
-        setEnquiries((prev) => prev.filter((item) => (item._id !== id && item.id !== id)));
-        setUnreadIds((prev) => prev.filter((unreadId) => unreadId !== id));
-        
-        const readMessages = JSON.parse(localStorage.getItem("readEnquiries") || "[]");
-        const updatedRead = readMessages.filter((readId) => readId !== id);
-        localStorage.setItem("readEnquiries", JSON.stringify(updatedRead));
-
-        // Delete ke baad bhi header ko recalibrate karein
-        window.dispatchEvent(new Event("cms_navigated"));
-
-        alert("Enquiry deleted successfully!");
-      } else {
-        alert("Failed to delete enquiry.");
-      }
-    } catch (err) {
-      console.error("Error deleting:", err);
-      alert("An error occurred while deleting.");
+      if (!response.ok) throw new Error();
+      setEnquiries((prev) => prev.filter((e) => (e._id || e.id) !== id));
+      setUnreadIds((prev) => prev.filter((x) => x !== id));
+      const read = JSON.parse(localStorage.getItem("readEnquiries") || "[]");
+      localStorage.setItem("readEnquiries", JSON.stringify(read.filter((x) => x !== id)));
+      if ((selected?._id || selected?.id) === id) setSelected(null);
+      window.dispatchEvent(new Event("cms_navigated"));
+    } catch {
+      alert("Failed to delete enquiry.");
     }
   };
 
+  const TABS = [
+    { key: "all", label: "All" },
+    { key: "contact", label: "Contact" },
+    { key: "career", label: "Job applications" },
+    { key: "dealer", label: "Dealer" },
+  ];
+
   return (
-    <div style={{ padding: "30px", fontFamily: "sans-serif", backgroundColor: "#f8f9fa", minHeight: "100vh" }}>
-      
-      {/* Header */}
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
+    <div style={{ padding: "clamp(14px,3vw,30px)", fontFamily: "Inter, sans-serif", background: "#f8f9fa", minHeight: "100vh" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 12, marginBottom: 18 }}>
         <div>
-          <h1 style={{ fontSize: "28px", fontWeight: "bold", color: "#111827" }}>CMS - Enquiries Management</h1>
-          <p style={{ color: "#6B7280", marginTop: "5px" }}>Manage and view user requests submitted from the contact form.</p>
+          <h1 style={{ fontSize: 24, fontWeight: 800, color: "#111827", margin: 0 }}>Enquiries</h1>
+          <p style={{ color: "#6B7280", margin: "4px 0 0", fontSize: 14 }}>
+            Messages and job applications sent from the website&apos;s Contact and Careers pages.
+          </p>
         </div>
-        
-        <button 
-          onClick={fetchEnquiries} 
-          style={{ padding: "10px 15px", backgroundColor: "#3B82F6", color: "white", border: "none", borderRadius: "5px", cursor: "pointer", fontWeight: "500" }}
-        >
-          Refresh Data
+        <button onClick={fetchEnquiries} style={{ padding: "10px 16px", background: "#16a34a", color: "#fff", border: "none", borderRadius: 8, cursor: "pointer", fontWeight: 700, fontSize: 14 }}>
+          Refresh
         </button>
       </div>
 
-      <hr style={{ border: "0", height: "1px", backgroundColor: "#E5E7EB", marginBottom: "30px" }} />
+      <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 16 }}>
+        {TABS.map((t) => (
+          <button key={t.key} onClick={() => setTab(t.key)} style={{
+            padding: "7px 14px", borderRadius: 50, fontSize: 13, fontWeight: 700, cursor: "pointer",
+            border: tab === t.key ? "none" : "1px solid #e5e7eb",
+            background: tab === t.key ? "#16a34a" : "#fff", color: tab === t.key ? "#fff" : "#374151",
+          }}>
+            {t.label} <span style={{ opacity: 0.75, fontWeight: 600 }}>({counts[t.key]})</span>
+          </button>
+        ))}
+      </div>
 
-      {/* Loading & Error States */}
-      {loading && <p style={{ textAlign: "center", fontSize: "18px", color: "#4B5563" }}>Loading enquiries...</p>}
-      {error && <p style={{ textAlign: "center", color: "#EF4444", fontWeight: "bold" }}>Error: {error}</p>}
+      {loading && <p style={{ textAlign: "center", color: "#4B5563", padding: 40 }}>Loading enquiries…</p>}
+      {error && <p style={{ textAlign: "center", color: "#EF4444", fontWeight: 700, padding: 20 }}>Error: {error}</p>}
 
-      {/* Data Table */}
       {!loading && !error && (
-        <div style={{ overflowX: "auto", backgroundColor: "white", borderRadius: "8px", boxShadow: "0 4px 6px -1px rgba(0,0,0,0.1)" }}>
-          <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left" }}>
+        <div style={{ overflowX: "auto", background: "#fff", borderRadius: 14, border: "1px solid #e5e7eb" }}>
+          <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left", minWidth: 680 }}>
             <thead>
-              <tr style={{ backgroundColor: "#F3F4F6", borderBottom: "2px solid #E5E7EB" }}>
-                <th style={{ padding: "15px" }}>Status</th>
-                <th style={{ padding: "15px" }}>Name</th>
-                <th style={{ padding: "15px" }}>Email</th>
-                <th style={{ padding: "15px" }}>Message Preview</th>
-                <th style={{ padding: "15px", textAlign: "center" }}>Actions</th>
+              <tr style={{ background: "#F9FAFB", borderBottom: "1px solid #E5E7EB" }}>
+                {["", "Type", "From", "Details", "Received", "Actions"].map((h) => (
+                  <th key={h} style={{ padding: "12px 14px", fontSize: 11, fontWeight: 700, color: "#6b7280", textTransform: "uppercase", whiteSpace: "nowrap" }}>{h}</th>
+                ))}
               </tr>
             </thead>
             <tbody>
-              {enquiries.length === 0 ? (
-                <tr>
-                  <td colSpan="5" style={{ padding: "30px", textAlign: "center", color: "#9CA3AF" }}>
-                    No enquiries found.
-                  </td>
-                </tr>
-              ) : (
-                enquiries.map((enquiry) => {
-                  const currentId = enquiry._id || enquiry.id;
-                  const isUnread = unreadIds.includes(currentId);
-
-                  return (
-                    <tr 
-                      key={currentId} 
-                      style={{ 
-                        borderBottom: "1px solid #E5E7EB", 
-                        backgroundColor: isUnread ? "#EFF6FF" : "transparent",
-                        transition: "0.2s" 
-                      }}
-                    >
-                      <td style={{ padding: "15px", textAlign: "center" }}>
-                        {isUnread && (
-                          <span style={{ height: "8px", width: "8px", backgroundColor: "#3B82F6", borderRadius: "50%", display: "inline-block" }} title="New Enquiry" />
-                        )}
-                      </td>
-                      <td style={{ padding: "15px", fontWeight: isUnread ? "600" : "500", color: "#1F2937" }}>{enquiry.name}</td>
-                      <td style={{ padding: "15px", color: "#4B5563" }}>{enquiry.email}</td>
-                      <td style={{ padding: "15px", color: "#6B7280", maxWidth: "300px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                        {enquiry.message}
-                      </td>
-                      <td style={{ padding: "15px", textAlign: "center" }}>
-                        <button
-                          onClick={() => handleViewEnquiry(enquiry)}
-                          style={{ marginRight: "10px", padding: "6px 12px", backgroundColor: "#10B981", color: "white", border: "none", borderRadius: "4px", cursor: "pointer" }}
-                        >
-                          View
-                        </button>
-                        <button
-                          onClick={() => handleDelete(currentId)}
-                          style={{ padding: "6px 12px", backgroundColor: "#EF4444", color: "white", border: "none", borderRadius: "4px", cursor: "pointer" }}
-                        >
-                          Delete
-                        </button>
-                      </td>
-                    </tr>
-                  );
-                })
-              )}
+              {visible.length === 0 ? (
+                <tr><td colSpan={6} style={{ padding: 36, textAlign: "center", color: "#9CA3AF" }}>No enquiries found.</td></tr>
+              ) : visible.map((e) => {
+                const id = e._id || e.id;
+                const unread = unreadIds.includes(id);
+                const tm = TYPE_META[typeOf(e)];
+                const preview = e.type === "career" ? [e.position || "General application", e.experience].filter(Boolean).join(" · ") : (e.subject || e.message);
+                return (
+                  <tr key={id} style={{ borderBottom: "1px solid #F3F4F6", background: unread ? "#F0FDF4" : "transparent" }}>
+                    <td style={{ padding: "12px 14px", width: 24 }}>
+                      {unread && <span title="New" style={{ height: 8, width: 8, background: "#16a34a", borderRadius: "50%", display: "inline-block" }} />}
+                    </td>
+                    <td style={{ padding: "12px 14px" }}>
+                      <span style={{ fontSize: 11, fontWeight: 700, padding: "3px 10px", borderRadius: 50, background: tm.bg, color: tm.color, whiteSpace: "nowrap" }}>{tm.label}</span>
+                    </td>
+                    <td style={{ padding: "12px 14px" }}>
+                      <div style={{ fontWeight: unread ? 800 : 600, color: "#111827", fontSize: 14 }}>{e.name}</div>
+                      <div style={{ fontSize: 12, color: "#6B7280" }}>{e.phone || e.email}</div>
+                    </td>
+                    <td style={{ padding: "12px 14px", color: "#4B5563", fontSize: 13, maxWidth: 280, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{preview}</td>
+                    <td style={{ padding: "12px 14px", color: "#9CA3AF", fontSize: 12, whiteSpace: "nowrap" }}>{fmtDate(e.createdAt)}</td>
+                    <td style={{ padding: "12px 14px", whiteSpace: "nowrap" }}>
+                      <button onClick={() => handleView(e)} style={{ marginRight: 8, padding: "6px 12px", background: "#ecfdf5", color: "#047857", border: "none", borderRadius: 6, cursor: "pointer", fontWeight: 700, fontSize: 12 }}>View</button>
+                      <button onClick={() => handleDelete(id)} style={{ padding: "6px 12px", background: "#fef2f2", color: "#dc2626", border: "none", borderRadius: 6, cursor: "pointer", fontWeight: 700, fontSize: 12 }}>Delete</button>
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>
       )}
 
-      {/* VIEW MODAL */}
-      {selectedEnquiry && (
-        <div style={{ position: "fixed", top: 0, left: 0, width: "100%", height: "100%", backgroundColor: "rgba(0,0,0,0.5)", display: "flex", justifyContent: "center", alignItems: "center", zIndex: 1000 }}>
-          <div style={{ backgroundColor: "white", padding: "30px", borderRadius: "8px", width: "500px", maxWidth: "90%", boxShadow: "0 20px 25px -5px rgba(0,0,0,0.1)" }}>
-            <h2 style={{ marginBottom: "15px", color: "#111827" }}>Enquiry Details</h2>
-            <p style={{ marginBottom: "10px" }}><strong>Name:</strong> {selectedEnquiry.name}</p>
-            <p style={{ marginBottom: "10px" }}><strong>Email:</strong> {selectedEnquiry.email}</p>
-            <div style={{ marginBottom: "20px" }}>
-              <strong>Message:</strong>
-              <p style={{ backgroundColor: "#F3F4F6", padding: "15px", borderRadius: "6px", marginTop: "5px", color: "#374151", lineHeight: "1.5", whiteSpace: "pre-line" }}>
-                {selectedEnquiry.message}
-              </p>
+      {selected && (
+        <div onClick={() => setSelected(null)} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.5)", display: "flex", justifyContent: "center", alignItems: "center", zIndex: 1000, padding: 12 }}>
+          <div onClick={(ev) => ev.stopPropagation()} style={{ background: "#fff", padding: "clamp(18px,3vw,28px)", borderRadius: 16, width: 540, maxWidth: "100%", maxHeight: "90vh", overflowY: "auto" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
+              <h2 style={{ margin: 0, fontSize: 18, color: "#111827" }}>
+                {selected.type === "career" ? "Job application" : "Enquiry details"}
+              </h2>
+              <button onClick={() => setSelected(null)} aria-label="Close" style={{ border: "none", background: "none", fontSize: 24, cursor: "pointer", lineHeight: 1 }}>×</button>
             </div>
-            <div style={{ textAlign: "right" }}>
-              <button 
-                onClick={() => setSelectedEnquiry(null)}
-                style={{ padding: "8px 16px", backgroundColor: "#6B7280", color: "white", border: "none", borderRadius: "5px", cursor: "pointer" }}
-              >
-                Close
-              </button>
+
+            <Row label="Name" value={selected.name} />
+            <Row label="Email" value={<a href={`mailto:${selected.email}`} style={link}>{selected.email}</a>} />
+            {selected.phone && <Row label="Phone" value={<a href={`tel:${selected.phone}`} style={link}>{selected.phone}</a>} />}
+            {selected.subject && <Row label="Topic" value={selected.subject} />}
+            {selected.type === "career" && (
+              <>
+                <Row label="Applying for" value={selected.position || "General application"} />
+                {selected.experience && <Row label="Experience" value={selected.experience} />}
+                {selected.resumeUrl && (
+                  <Row label="Resume" value={<a href={selected.resumeUrl} target="_blank" rel="noopener noreferrer" style={link}>Open resume link ↗</a>} />
+                )}
+              </>
+            )}
+            <Row label="Received" value={fmtDate(selected.createdAt)} />
+
+            {selected.message && (
+              <div style={{ marginTop: 14 }}>
+                <div style={{ fontSize: 12, fontWeight: 700, color: "#6b7280", marginBottom: 6 }}>{selected.type === "career" ? "About the applicant" : "Message"}</div>
+                <p style={{ background: "#F3F4F6", padding: 14, borderRadius: 8, color: "#374151", lineHeight: 1.6, whiteSpace: "pre-line", margin: 0 }}>{selected.message}</p>
+              </div>
+            )}
+
+            <div style={{ textAlign: "right", marginTop: 18 }}>
+              <button onClick={() => setSelected(null)} style={{ padding: "9px 18px", background: "#6B7280", color: "#fff", border: "none", borderRadius: 8, cursor: "pointer", fontWeight: 700 }}>Close</button>
             </div>
           </div>
         </div>
       )}
+    </div>
+  );
+}
+
+const link = { color: "#2563eb", textDecoration: "none", fontWeight: 600, wordBreak: "break-all" };
+
+function Row({ label, value }) {
+  return (
+    <div style={{ display: "flex", gap: 12, padding: "8px 0", borderBottom: "1px solid #f3f4f6", fontSize: 14 }}>
+      <span style={{ width: 110, flexShrink: 0, color: "#6b7280", fontWeight: 600 }}>{label}</span>
+      <span style={{ color: "#111827", minWidth: 0 }}>{value}</span>
     </div>
   );
 }

@@ -103,17 +103,15 @@ exports.uploadProfileImage = async (req, res) => {
   try {
     if (!req.file) return res.status(400).json({ message: 'No file uploaded' });
 
-    const fs   = require('fs');
-    const path = require('path');
+    const { uploadToCloud, deleteByUrl } = require('../../middleware/mediaUpload');
 
-    // Delete old profile image if exists
     const existing = await HrmEmployee.findById(req.empUser._id).select('profile_image').lean();
-    if (existing?.profile_image) {
-      const oldPath = path.join(__dirname, '..', '..', existing.profile_image);
-      if (fs.existsSync(oldPath)) fs.unlink(oldPath, () => {});
-    }
 
-    const imagePath = `uploads/avatars/${req.file.filename}`;
+    // Upload new photo to Cloudinary, then remove the previous one (if it was on Cloudinary)
+    const uploaded = await uploadToCloud(req.file, 'subham-store/avatars');
+    if (existing?.profile_image) deleteByUrl(existing.profile_image);
+
+    const imagePath = uploaded.url;
     const emp = await HrmEmployee.findByIdAndUpdate(
       req.empUser._id,
       { profile_image: imagePath },
@@ -129,14 +127,10 @@ exports.uploadProfileImage = async (req, res) => {
 // ── Delete Profile Photo ──────────────────────────────────────────────────────
 exports.deleteProfileImage = async (req, res) => {
   try {
-    const fs   = require('fs');
-    const path = require('path');
+    const { deleteByUrl } = require('../../middleware/mediaUpload');
 
     const existing = await HrmEmployee.findById(req.empUser._id).select('profile_image').lean();
-    if (existing?.profile_image) {
-      const filePath = path.join(__dirname, '..', '..', existing.profile_image);
-      if (fs.existsSync(filePath)) fs.unlink(filePath, () => {});
-    }
+    if (existing?.profile_image) await deleteByUrl(existing.profile_image);
 
     await HrmEmployee.findByIdAndUpdate(req.empUser._id, { profile_image: null });
     res.json({ message: 'Profile photo removed' });

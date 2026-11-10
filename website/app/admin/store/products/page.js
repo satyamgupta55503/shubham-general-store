@@ -3,6 +3,7 @@ import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { Toaster } from "react-hot-toast";
+import MediaUploader from "@/components/admin/MediaUploader";
 
 const API = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:5000";
 const getToken = () => typeof window !== "undefined" ? localStorage.getItem("token") : "";
@@ -10,6 +11,7 @@ const getToken = () => typeof window !== "undefined" ? localStorage.getItem("tok
 export default function AdminProductsPage() {
   const [products,   setProducts]   = useState([]);
   const [categories, setCategories] = useState([]);
+  const [brands,     setBrands]     = useState([]);
   const [loading,    setLoading]    = useState(true);
   const [showForm,   setShowForm]   = useState(false);
   const [editItem,   setEditItem]   = useState(null);
@@ -23,10 +25,11 @@ export default function AdminProductsPage() {
   const emptyForm = {
     name:"", slug:"", description:"", shortDesc:"",
     price:"", salePrice:"", costPrice:"",
-    category:"", brand:"", packSize:"", unit:"piece",
+    category:"", brand:"", brandRef:"", brandLine:"", packSize:"", unit:"piece",
     stockQty:"", sku:"", weight:"",
     isActive:true, isFeatured:false, isNewArrival:false, isBestSeller:false, isOrganic:false, isVeg:true,
     tags:"",
+    thumbnail:"", images:[], video:"", brochure:"",
   };
   const [form, setForm] = useState(emptyForm);
 
@@ -45,6 +48,9 @@ export default function AdminProductsPage() {
     axios.get(`${API}/api/store/categories/admin/all`, { headers:{ Authorization:`Bearer ${getToken()}` } })
       .then(r => setCategories(r.data.data||[]))
       .catch(() => {});
+    axios.get(`${API}/api/store/brands/admin/all`, { headers:{ Authorization:`Bearer ${getToken()}` } })
+      .then(r => setBrands(r.data.data||[]))
+      .catch(() => {});
   }, [load]);
 
   const openAdd = () => { setEditItem(null); setForm(emptyForm); setShowForm(true); };
@@ -54,11 +60,13 @@ export default function AdminProductsPage() {
       name:p.name, slug:p.slug, description:p.description||"", shortDesc:p.shortDesc||"",
       price:p.price, salePrice:p.salePrice||"", costPrice:p.costPrice||"",
       category:p.category?._id||p.category||"", brand:p.brand||"",
+      brandRef:p.brandRef?._id||p.brandRef||"", brandLine:p.brandLine||"",
       packSize:p.packSize||"", unit:p.unit||"piece",
       stockQty:p.stockQty, sku:p.sku||"", weight:p.weight||"",
       isActive:p.isActive, isFeatured:p.isFeatured, isNewArrival:p.isNewArrival,
       isBestSeller:p.isBestSeller, isOrganic:p.isOrganic, isVeg:p.isVeg,
       tags:p.tags?.join(", ")||"",
+      thumbnail:p.thumbnail||"", images:p.images||[], video:p.video||"", brochure:p.brochure||"",
     });
     setShowForm(true);
   };
@@ -74,6 +82,8 @@ export default function AdminProductsPage() {
       stockQty:   Number(form.stockQty)||0,
       weight:     Number(form.weight)||0,
       tags:       form.tags ? form.tags.split(",").map(t=>t.trim()).filter(Boolean) : [],
+      // Main image falls back to the first gallery image
+      thumbnail:  form.thumbnail || form.images?.[0] || "",
     };
     try {
       if (editItem) {
@@ -228,7 +238,26 @@ export default function AdminProductsPage() {
                     {categories.map(c => <option key={c._id} value={c._id}>{c.name}</option>)}
                   </select>
                 </div>
-                <FormField label="Brand"     value={form.brand}    onChange={v => setForm(f=>({...f,brand:v}))} />
+                <div>
+                  <label style={lbl}>Dealer brand</label>
+                  <select value={form.brandRef} style={inp}
+                    onChange={e=>setForm(f=>({...f, brandRef:e.target.value, brandLine:""}))}>
+                    <option value="">— None / other brand —</option>
+                    {brands.map(b => <option key={b._id} value={b._id}>{b.name}</option>)}
+                  </select>
+                </div>
+                <div>
+                  <label style={lbl}>Product type (inside brand)</label>
+                  <select value={form.brandLine} style={inp} disabled={!form.brandRef}
+                    onChange={e=>setForm(f=>({...f, brandLine:e.target.value}))}>
+                    <option value="">{form.brandRef ? "— Select type —" : "Select a brand first"}</option>
+                    {(brands.find(b => b._id === form.brandRef)?.productLines || []).map(l =>
+                      <option key={l._id} value={l.slug}>{l.name}</option>)}
+                  </select>
+                </div>
+                {!form.brandRef && (
+                  <FormField label="Other brand name (text)" value={form.brand} onChange={v => setForm(f=>({...f,brand:v}))} placeholder="Only if the brand is not in the list above" full />
+                )}
                 <FormField label="SKU"       value={form.sku}      onChange={v => setForm(f=>({...f,sku:v}))} />
                 <FormField label="Pack Size" value={form.packSize}  onChange={v => setForm(f=>({...f,packSize:v}))} placeholder="e.g. 500g, 1L" />
                 <div>
@@ -240,6 +269,21 @@ export default function AdminProductsPage() {
                 <FormField label="Stock Qty" value={form.stockQty}  type="number" onChange={v => setForm(f=>({...f,stockQty:v}))} />
                 <FormField label="Weight (g)"value={form.weight}    type="number" onChange={v => setForm(f=>({...f,weight:v}))} />
                 <FormField label="Tags (comma separated)" value={form.tags} onChange={v=>setForm(f=>({...f,tags:v}))} full placeholder="e.g. fresh, organic, local" />
+
+                {/* Media — stored on Cloudinary */}
+                <div style={{ gridColumn:"1/-1", borderTop:"1px solid #f3f4f6", paddingTop:14 }}>
+                  <div style={{ fontSize:13, fontWeight:800, color:"#111827", marginBottom:12 }}>Media</div>
+                  <div style={{ display:"grid", gap:16 }}>
+                    <MediaUploader kind="image" folder="products" label="Main image"
+                      value={form.thumbnail} onChange={v=>setForm(f=>({...f,thumbnail:v}))} />
+                    <MediaUploader kind="image" folder="products" multiple label="Gallery images"
+                      value={form.images} onChange={v=>setForm(f=>({...f,images:v}))} />
+                    <MediaUploader kind="video" folder="videos" label="Product video (optional)"
+                      value={form.video} onChange={v=>setForm(f=>({...f,video:v}))} />
+                    <MediaUploader kind="pdf" folder="documents" label="Brochure / spec sheet PDF (optional)"
+                      value={form.brochure} onChange={v=>setForm(f=>({...f,brochure:v}))} />
+                  </div>
+                </div>
 
                 {/* Toggles */}
                 <div style={{ gridColumn:"1/-1", display:"flex", gap:16, flexWrap:"wrap" }}>

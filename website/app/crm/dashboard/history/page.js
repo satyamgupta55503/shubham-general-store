@@ -4,7 +4,7 @@ import { Clock, Search, RefreshCw } from "lucide-react";
 import CRM_API from "@/utils/crmApi";
 
 const ACTION_COLORS = { created:["#dcfce7","#15803d"], updated:["#dbeafe","#1d4ed8"], deleted:["#fee2e2","#dc2626"], status_changed:["#fef9c3","#a16207"], payment_received:["#ccfbf1","#0f766e"], sent:["#ede9fe","#6d28d9"], approved:["#dcfce7","#15803d"], rejected:["#fee2e2","#dc2626"], login:["#f1f5f9","#475569"], logout:["#f1f5f9","#475569"], access_granted:["#ccfbf1","#0f766e"], access_revoked:["#fee2e2","#dc2626"] };
-const ENTITY_TYPES = ["client","project","service","proposal","quotation","invoice","payment","portfolio","enquiry","user"];
+const ENTITY_TYPES = ["client","project","service","proposal","quotation","invoice","payment","portfolio","enquiry","user","order_sheet"];
 const fmtDate = d => d ? new Date(d).toLocaleString("en-IN",{day:"2-digit",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit",hour12:true}) : "—";
 
 export default function CrmHistoryPage() {

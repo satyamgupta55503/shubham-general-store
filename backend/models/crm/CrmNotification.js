@@ -10,7 +10,8 @@ const crmNotificationSchema = new mongoose.Schema(
       enum: [
         'client_created',
         'invoice_created', 'invoice_paid',
-        'quotation_created', 'quotation_approved', 'quotation_rejected',
+        'quotation_created', 'quotation_approved', 'quotation_rejected', 'quotation_sent',
+        'invoice_sent', 'order_sent',
         'payment_received',
         'proposal_created', 'proposal_sent', 'proposal_accepted', 'proposal_rejected',
         'project_created', 'project_status_changed',

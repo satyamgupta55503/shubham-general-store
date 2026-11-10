@@ -32,10 +32,14 @@ const ProductSchema = new mongoose.Schema(
     // Media
     images:      [{ type: String }],                    // array of image URLs
     thumbnail:   { type: String, default: "" },         // primary image
+    video:       { type: String, default: "" },         // product video URL (Cloudinary)
+    brochure:    { type: String, default: "" },         // PDF brochure / spec sheet URL (Cloudinary)
 
     // Classification
     category:    { type: mongoose.Schema.Types.ObjectId, ref: "GroceryCategory", required: true },
-    brand:       { type: String, default: "" },
+    brand:       { type: String, default: "" },          // brand name (text, kept for search/back-compat)
+    brandRef:    { type: mongoose.Schema.Types.ObjectId, ref: "Brand", default: null },
+    brandLine:   { type: String, default: "" },          // slug of a Brand.productLines entry
     tags:        [{ type: String }],
 
     // Inventory
@@ -72,6 +76,7 @@ const ProductSchema = new mongoose.Schema(
 
 // slug already indexed via `unique: true` above
 ProductSchema.index({ category: 1 });
+ProductSchema.index({ brandRef: 1, brandLine: 1 });
 ProductSchema.index({ isFeatured: 1 });
 ProductSchema.index({ isBestSeller: 1 });
 ProductSchema.index({ name: "text", description: "text", brand: "text", tags: "text" });

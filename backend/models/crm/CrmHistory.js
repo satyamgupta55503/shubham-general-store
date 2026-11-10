@@ -35,7 +35,7 @@ const crmHistorySchema = new mongoose.Schema(
       enum: [
         'client', 'project', 'service', 'proposal', 'quotation',
         'invoice', 'payment', 'portfolio', 'enquiry', 'user',
-        'followup', 'settings', 'reminder',
+        'followup', 'settings', 'reminder', 'order_sheet',
       ],
       required: true,
     },

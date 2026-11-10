@@ -2,6 +2,7 @@
 import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
+import { mediaUrl } from "@/utils/mediaUrl";
 
 const API      = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:5000";
 const getToken = () => (typeof window !== "undefined" ? localStorage.getItem("token") : "");
@@ -289,7 +290,7 @@ function ImageUpload({ value, onUpload, onChange }) {
     <div style={{ display: "flex", gap: 12, alignItems: "center", flexWrap: "wrap" }}>
       {value ? (
         <div style={{ position: "relative" }}>
-          <img src={`${API}/${value}`} alt="preview" style={{ width: 90, height: 90, objectFit: "cover", borderRadius: 10, border: "1px solid #e5e7eb" }} />
+          <img src={mediaUrl(value)} alt="preview" style={{ width: 90, height: 90, objectFit: "cover", borderRadius: 10, border: "1px solid #e5e7eb" }} />
           <button onClick={() => onChange("")} style={{ position: "absolute", top: -8, right: -8, width: 22, height: 22, borderRadius: "50%", border: "none", background: "#ef4444", color: "#fff", cursor: "pointer", fontSize: 13 }}>×</button>
         </div>
       ) : (

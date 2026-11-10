@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Bell, LogOut, ChevronDown, Menu } from "lucide-react";
 import EMP_API from "@/utils/empApi";
+import { mediaUrl } from "@/utils/mediaUrl";
 
 export default function EmpHeader({ onMenuToggle }) {
   const router = useRouter();
@@ -55,7 +56,7 @@ export default function EmpHeader({ onMenuToggle }) {
         <div ref={dropRef} style={{ position:"relative" }}>
           <button onClick={()=>setDropOpen(!dropOpen)} style={{ display:"flex", alignItems:"center", gap:"8px", padding:"5px 10px", borderRadius:"8px", border:"1px solid #e2e8f0", background:"#f8fafc", cursor:"pointer" }}>
             {emp.profile_image ? (
-              <img src={`${BASE}/${emp.profile_image}`} alt={emp.full_name} style={{ width:30,height:30,borderRadius:"50%",objectFit:"cover",border:"2px solid #dbeafe",flexShrink:0 }} onError={e=>{e.target.style.display="none";}}/>
+              <img src={mediaUrl(emp.profile_image)} alt={emp.full_name} style={{ width:30,height:30,borderRadius:"50%",objectFit:"cover",border:"2px solid #dbeafe",flexShrink:0 }} onError={e=>{e.target.style.display="none";}}/>
             ) : (
               <div style={{ width:"30px", height:"30px", borderRadius:"50%", background:"linear-gradient(135deg,#2563eb,#1d4ed8)", color:"#fff", display:"flex", alignItems:"center", justifyContent:"center", fontWeight:"700", fontSize:"12px" }}>{initials}</div>
             )}

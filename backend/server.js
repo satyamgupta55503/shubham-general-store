@@ -172,7 +172,10 @@ app.use("/api/emp", require("./routes/emp/empRoutes"));
 
 // ── STORE (Subham General Store — Grocery Ecommerce) ─────────────
 app.use("/api/store/homepage",   require("./routes/store/storeHomepageRoutes"));
+app.use("/api/store/media",      require("./routes/store/storeMediaRoutes"));
 app.use("/api/store/categories", require("./routes/store/storeCategoryRoutes"));
+app.use("/api/store/brands",     require("./routes/store/storeBrandRoutes"));
+app.use("/api/store/settings",   require("./routes/store/storeSettingsRoutes"));
 app.use("/api/store/products",   require("./routes/store/storeProductRoutes"));
 app.use("/api/store/customers",  require("./routes/store/storeCustomerRoutes"));
 app.use("/api/store/cart",       require("./routes/store/storeCartRoutes"));

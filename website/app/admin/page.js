@@ -187,7 +187,7 @@ const Dashboard = () => {
                         <div className="post-info">
                           {post.image ? (
                             <img
-                            src={`${process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:5000"}/uploads/${post.image}`}
+                            src={/^https?:\/\//.test(post.image) ? post.image : `${process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:5000"}/uploads/${post.image}`}
                               alt={post.title}
                             />
                           ) : (

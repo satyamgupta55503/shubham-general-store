@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import axios from "axios";
 
+import { optimizedImage } from "@/utils/mediaUrl";
+
 const API = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:5000";
 
 export default function CategoriesStrip({ initialData }) {
@@ -52,7 +54,7 @@ export default function CategoriesStrip({ initialData }) {
                   overflow: "hidden",
                 }}>
                   {cat.image ? (
-                    <img src={`${API}/${cat.image}`} alt={cat.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                    <img src={optimizedImage(cat.image, 160)} alt={cat.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                   ) : (
                     <span style={{ fontSize: 20, fontWeight: 800, color: cat.color }}>{cat.name.charAt(0)}</span>
                   )}

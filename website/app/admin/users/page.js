@@ -131,7 +131,7 @@ export default function UserManagementPanel() {
           <div style={{ display: "flex", alignItems: "center", gap: "18px" }}>
             <div style={{ position: "relative" }}>
               {superAdmin.profileImage ? (
-                <img src={`${UPLOADS_URL}/${superAdmin.profileImage}`} alt={superAdmin.name} style={{ width: "64px", height: "64px", borderRadius: "50%", objectFit: "cover", border: "3px solid #8ce600" }} />
+                <img src={/^https?:\/\//.test(superAdmin.profileImage) ? superAdmin.profileImage : `${UPLOADS_URL}/${superAdmin.profileImage}`} alt={superAdmin.name} style={{ width: "64px", height: "64px", borderRadius: "50%", objectFit: "cover", border: "3px solid #8ce600" }} />
               ) : (
                 <div style={{ width: "64px", height: "64px", borderRadius: "50%", background: "linear-gradient(135deg, #8ce600, #6abf00)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "24px", fontWeight: "800", color: "#1a2e05" }}>
                   {superAdmin.name.charAt(0)}
@@ -257,7 +257,7 @@ export default function UserManagementPanel() {
                 <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
                   <div style={{ position: "relative" }}>
                     {user.profileImage ? (
-                      <img src={`${UPLOADS_URL}/${user.profileImage}`} alt={user.name} style={{ width: "44px", height: "44px", borderRadius: "50%", objectFit: "cover", border: "2px solid #e5e7eb" }} />
+                      <img src={/^https?:\/\//.test(user.profileImage) ? user.profileImage : `${UPLOADS_URL}/${user.profileImage}`} alt={user.name} style={{ width: "44px", height: "44px", borderRadius: "50%", objectFit: "cover", border: "2px solid #e5e7eb" }} />
                     ) : (
                       <div style={{ width: "44px", height: "44px", borderRadius: "50%", background: "#f1f5f9", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "16px", fontWeight: "700", color: "#374151", border: "2px solid #e5e7eb" }}>
                         {user.name.charAt(0).toUpperCase()}

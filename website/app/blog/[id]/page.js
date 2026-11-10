@@ -367,7 +367,7 @@ export default function BlogDetails({ params }) {
                   <div className="box-image-header" style={{ marginBottom: "30px" }}>
                     <img
                       alt={blogPost.title}
-                      src={`https://backend.digikraftsocial.com/uploads/${blogPost.image}`}
+                      src={/^https?:\/\//.test(blogPost.image) ? blogPost.image : `https://backend.digikraftsocial.com/uploads/${blogPost.image}`}
                       style={{ width: "100%", maxHeight: "500px", objectFit: "cover", borderRadius: "16px" }}
                     />
                   </div>

@@ -36,7 +36,7 @@ export default function BlogPosts({ posts = [], showItem = 6 }) {
             {post.image && (
               <div className="blog-img mb-3">
                 <img 
-                  src={`https://backend.digikraftsocial.com/uploads/${post.image}`} 
+                  src={/^https?:\/\//.test(post.image) ? post.image : `https://backend.digikraftsocial.com/uploads/${post.image}`} 
                   alt={post.title} 
                   style={{ width: "100%", height: "200px", objectFit: "cover", borderRadius: "8px" }}
                 />

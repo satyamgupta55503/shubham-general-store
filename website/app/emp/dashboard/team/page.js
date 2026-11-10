@@ -8,6 +8,8 @@ const STATUS_COLOR = {
   probation: "#a16207",
 };
 
+import { mediaUrl } from "@/utils/mediaUrl";
+
 const BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:5000";
 
 const AVATAR_COLORS = [
@@ -79,7 +81,7 @@ export default function EmpTeamPage() {
                   <div key={m.id} className="emp-team-card" onClick={()=>setSelected(m)} style={{ cursor:"pointer" }}>
                     {/* Avatar */}
                     {m.profile_image ? (
-                      <img src={`${BASE_URL}/${m.profile_image}`} alt={m.full_name} style={{ width:56,height:56,borderRadius:"50%",objectFit:"cover",border:`2px solid ${color}33`,margin:"0 auto 12px",display:"block" }} onError={e=>{e.target.style.display="none";}}/>
+                      <img src={mediaUrl(m.profile_image)} alt={m.full_name} style={{ width:56,height:56,borderRadius:"50%",objectFit:"cover",border:`2px solid ${color}33`,margin:"0 auto 12px",display:"block" }} onError={e=>{e.target.style.display="none";}}/>
                     ) : (
                       <div style={{ width:56,height:56,borderRadius:"50%",background:color,color:"#fff",fontSize:20,fontWeight:800,display:"flex",alignItems:"center",justifyContent:"center",margin:"0 auto 12px" }}>{m.initials}</div>
                     )}
@@ -99,7 +101,7 @@ export default function EmpTeamPage() {
         <div style={{ position:"fixed",inset:0,background:"rgba(15,23,42,.45)",zIndex:1000,display:"flex",alignItems:"center",justifyContent:"center",padding:20 }} onClick={()=>setSelected(null)}>
           <div style={{ background:"#fff",borderRadius:20,padding:32,maxWidth:380,width:"100%",boxShadow:"0 20px 60px rgba(0,0,0,.15)",textAlign:"center" }} onClick={e=>e.stopPropagation()}>
             {selected.profile_image ? (
-              <img src={`${BASE_URL}/${selected.profile_image}`} alt={selected.full_name} style={{ width:72,height:72,borderRadius:"50%",objectFit:"cover",border:`3px solid ${getColor(selected.full_name)}33`,margin:"0 auto 16px",display:"block" }} onError={e=>{e.target.style.display="none";}}/>
+              <img src={mediaUrl(selected.profile_image)} alt={selected.full_name} style={{ width:72,height:72,borderRadius:"50%",objectFit:"cover",border:`3px solid ${getColor(selected.full_name)}33`,margin:"0 auto 16px",display:"block" }} onError={e=>{e.target.style.display="none";}}/>
             ) : (
               <div style={{ width:72,height:72,borderRadius:"50%",background:getColor(selected.full_name),color:"#fff",fontSize:26,fontWeight:800,display:"flex",alignItems:"center",justifyContent:"center",margin:"0 auto 16px" }}>{selected.initials}</div>
             )}

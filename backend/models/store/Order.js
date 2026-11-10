@@ -77,12 +77,12 @@ const OrderSchema = new mongoose.Schema(
 );
 
 // Auto-generate order number SGS-XXXXXX before validation
-OrderSchema.pre("validate", async function (next) {
+// (Mongoose 9: async hooks must not take/call `next`)
+OrderSchema.pre("validate", async function () {
   if (!this.orderNumber) {
     const count = await mongoose.model("Order").countDocuments();
     this.orderNumber = `SGS-${String(count + 1).padStart(6, "0")}`;
   }
-  next();
 });
 
 // orderNumber already indexed via `unique: true` above

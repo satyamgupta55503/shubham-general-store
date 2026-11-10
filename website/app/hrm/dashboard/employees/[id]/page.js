@@ -7,6 +7,7 @@ import {
   RefreshCw, AlertCircle, Building2, CreditCard, Shield, Camera, Trash2
 } from "lucide-react";
 import HRM_API from "@/utils/hrmApi";
+import { mediaUrl } from "@/utils/mediaUrl";
 
 const STATUS_STYLE = {
   active:        { bg:"#dcfce7", c:"#15803d" },
@@ -268,7 +269,7 @@ export default function HrmEmployeeDetailPage() {
           <div style={{ position:"relative",flexShrink:0 }}>
             {emp.profile_image ? (
               <img
-                src={`${process.env.NEXT_PUBLIC_BACKEND_URL||"http://localhost:5000"}/${emp.profile_image}`}
+                src={mediaUrl(emp.profile_image)}
                 alt={emp.full_name}
                 style={{ width:72,height:72,borderRadius:"50%",objectFit:"cover",border:"3px solid #ede9fe" }}
               />

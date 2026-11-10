@@ -1,4 +1,14 @@
+"use client";
 import Link from "next/link";
+import useStoreSettings from "@/components/store/useStoreSettings";
+import { telHref, whatsappHref } from "@/utils/storeSettings";
+
+const COMPANY_LINKS = [
+  { label: "About Us",   href: "/about"   },
+  { label: "Our Brands", href: "/brands"  },
+  { label: "Careers",    href: "/careers" },
+  { label: "Contact Us", href: "/contact" },
+];
 
 const CATEGORIES = [
   { label: "Vegetables",   href: "/categories/vegetables"  },
@@ -27,8 +37,8 @@ const SOCIALS = [
     icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>,
   },
   {
-    label: "Twitter", href: "#",
-    icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.9 1.15h3.68l-8.04 9.19L24 22.85h-7.41l-5.8-7.58-6.64 7.58H.46l8.6-9.83L0 1.15h7.59l5.24 6.93zM17.61 20.64h2.04L6.48 3.24H4.3z"/></svg>,
+    label: "YouTube", href: "#",
+    icon: <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2C0 8.1 0 12 0 12s0 3.9.5 5.8a3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1c.5-1.9.5-5.8.5-5.8s0-3.9-.5-5.8zM9.6 15.6V8.4l6.2 3.6z"/></svg>,
   },
   {
     label: "WhatsApp", href: "#",
@@ -37,6 +47,26 @@ const SOCIALS = [
 ];
 
 export default function StoreFooter() {
+  const { contact, social } = useStoreSettings();
+
+  // Only show contact lines the store has actually filled in (CMS → Store Info)
+  const contactRows = [
+    contact.address && { label: "Address:", text: [contact.address, contact.city].filter(Boolean).join(", ") },
+    contact.phone   && { label: "Phone:",   text: contact.phone,  href: telHref(contact.phone) },
+    contact.email   && { label: "Email:",   text: contact.email,  href: `mailto:${contact.email}` },
+    contact.hours   && { label: "Hours:",   text: contact.hours },
+  ].filter(Boolean);
+
+  // Social buttons: real links when set, otherwise hidden
+  const socials = SOCIALS
+    .map((s) => ({
+      ...s,
+      href:
+        s.label === "WhatsApp" ? (contact.whatsapp ? whatsappHref(contact.whatsapp) : "")
+        : social[s.label.toLowerCase()] || "",
+    }))
+    .filter((s) => s.href);
+
   return (
     <footer style={{ background: "#052e16", color: "#fff", marginTop: 60 }} aria-label="Site footer">
       {/* Wave separator */}
@@ -127,31 +157,53 @@ export default function StoreFooter() {
             </ul>
           </nav>
 
+          {/* Company */}
+          <nav aria-label="Company">
+            <h3 style={{ fontSize: 13, fontWeight: 700, margin: "0 0 16px", color: "#86efac", letterSpacing: ".06em", textTransform: "uppercase" }}>
+              Company
+            </h3>
+            <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 9 }}>
+              {COMPANY_LINKS.map(l => (
+                <li key={l.href}>
+                  <Link href={l.href} className="footer-link">
+                    <span aria-hidden="true" style={{ color: "#16a34a" }}>›</span> {l.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+
           {/* Contact */}
           <address style={{ fontStyle: "normal" }}>
             <h3 style={{ fontSize: 13, fontWeight: 700, margin: "0 0 16px", color: "#86efac", letterSpacing: ".06em", textTransform: "uppercase" }}>
               Contact Us
             </h3>
             <div style={{ display: "flex", flexDirection: "column", gap: 11 }}>
-              {[
-                { label: "Address:", text: "Main Market, Raipur, Chhattisgarh" },
-                { label: "Phone:",   text: "+91 XXXXXXXXXX" },
-                { label: "Email:",   text: "support@subhamstore.com" },
-                { label: "Hours:",   text: "Mon-Sat: 8:00 AM - 9:00 PM" },
-              ].map(c => (
+              {contactRows.map(c => (
                 <div key={c.label} style={{ display: "flex", gap: 10, alignItems: "flex-start" }}>
                   <span style={{ fontSize: 12, fontWeight: 700, color: "#86efac", flexShrink: 0 }}>{c.label}</span>
-                  <span style={{ fontSize: 13, color: "rgba(255,255,255,.6)", lineHeight: 1.5 }}>{c.text}</span>
+                  {c.href ? (
+                    <a href={c.href} style={{ fontSize: 13, color: "rgba(255,255,255,.75)", lineHeight: 1.5, textDecoration: "none", wordBreak: "break-word" }}>{c.text}</a>
+                  ) : (
+                    <span style={{ fontSize: 13, color: "rgba(255,255,255,.6)", lineHeight: 1.5 }}>{c.text}</span>
+                  )}
                 </div>
               ))}
+              {contactRows.length === 0 && (
+                <Link href="/contact" className="footer-link" style={{ fontSize: 13 }}>
+                  <span aria-hidden="true" style={{ color: "#16a34a" }}>›</span> Send us a message
+                </Link>
+              )}
             </div>
-            <div style={{ display: "flex", gap: 8, marginTop: 20 }} aria-label="Social media">
-              {SOCIALS.map(s => (
-                <a key={s.label} href={s.href} aria-label={s.label} className="footer-social-btn">
-                  <span aria-hidden="true">{s.icon}</span>
-                </a>
-              ))}
-            </div>
+            {socials.length > 0 && (
+              <div style={{ display: "flex", gap: 8, marginTop: 20 }} aria-label="Social media">
+                {socials.map(s => (
+                  <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer" aria-label={s.label} className="footer-social-btn">
+                    <span aria-hidden="true">{s.icon}</span>
+                  </a>
+                ))}
+              </div>
+            )}
           </address>
         </div>
 

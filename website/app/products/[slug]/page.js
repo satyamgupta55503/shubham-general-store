@@ -9,6 +9,7 @@ import JsonLd                 from "@/components/store/seo/JsonLd";
 import BreadcrumbJsonLd       from "@/components/store/seo/BreadcrumbJsonLd";
 import ProductDetailClient    from "./_ProductDetailClient";
 import RelatedProducts        from "@/components/store/RelatedProducts";
+import { mediaUrl }           from "@/utils/mediaUrl";
 
 const API      = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:5000";
 const BASE_URL = "https://www.subhamgeneralstore.com";
@@ -33,7 +34,7 @@ export async function generateMetadata({ params }) {
   if (!product) return { title: "Product Not Found" };
 
   const price = product.salePrice ?? product.price;
-  const image = product.thumbnail ? `${API}/${product.thumbnail}` : `${BASE_URL}/assets/imgs/store/og-image.png`;
+  const image = product.thumbnail ? mediaUrl(product.thumbnail) : `${BASE_URL}/assets/imgs/store/og-image.png`;
 
   return {
     title:       product.name,
@@ -62,7 +63,7 @@ export default async function ProductPage({ params }) {
   if (!product) notFound();
 
   const price  = product.salePrice ?? product.price;
-  const image  = product.thumbnail ? `${API}/${product.thumbnail}` : null;
+  const image  = product.thumbnail ? mediaUrl(product.thumbnail) : null;
 
   // Product JSON-LD
   const productSchema = {

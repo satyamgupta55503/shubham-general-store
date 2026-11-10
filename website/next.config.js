@@ -18,12 +18,10 @@ const nextConfig = {
       // Old agency pages → store equivalents
       { source: "/service",   destination: "/categories", permanent: true },
       { source: "/portfolio", destination: "/products",   permanent: true },
-      { source: "/about",     destination: "/",           permanent: true },
       { source: "/blog",      destination: "/",           permanent: true },
       { source: "/blog-2",    destination: "/",           permanent: true },
       { source: "/blog-post", destination: "/",           permanent: true },
       { source: "/pricing",   destination: "/",           permanent: true },
-      { source: "/contact",   destination: "/",           permanent: true },
       { source: "/seo",       destination: "/",           permanent: true },
       { source: "/qr",        destination: "/",           permanent: true },
     ];

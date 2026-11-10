@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import StoreLayout   from "@/components/store/layout/StoreLayout";
 import { useCart }   from "@/context/CartContext";
 import { useCustomerAuth } from "@/context/CustomerAuthContext";
+import { optimizedImage } from "@/utils/mediaUrl";
 
 const API = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:5000";
 
@@ -204,7 +205,7 @@ function CartItem({ item, onUpdate, onRemove }) {
         overflow:"hidden", flexShrink:0,
       }}>
         {item.thumbnail ? (
-          <img src={`${API}/${item.thumbnail}`} alt={item.name} style={{ width:"100%", height:"100%", objectFit:"cover" }} />
+          <img src={optimizedImage(item.thumbnail, 200)} alt={item.name} style={{ width:"100%", height:"100%", objectFit:"cover" }} />
         ) : (
           <span style={{ fontSize:36 }}></span>
         )}

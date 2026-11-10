@@ -4,15 +4,26 @@ const fs = require("fs");
 const path = require("path");
 
 // Helper to delete old images
+const { deleteByUrl, parseCloudUrl } = require("../middleware/mediaUpload");
+
+// Helper to delete old images (Cloudinary URL or legacy local filename)
 const deleteImage = (filename) => {
-  if (filename) {
-    const filePath = path.join(__dirname, "../uploads", filename);
-    fs.unlink(filePath, (err) => {
-      if (err && err.code !== 'ENOENT') {
-        console.error("Error deleting image:", err);
-      }
-    });
+  if (!filename) return;
+
+  // New uploads live on Cloudinary
+  if (parseCloudUrl(filename)) {
+    deleteByUrl(filename);
+    return;
   }
+
+  // Legacy local file — only plain filenames (no path tricks / URLs)
+  if (/^https?:\/\//i.test(filename) || filename !== path.basename(filename)) return;
+  const filePath = path.join(__dirname, "../uploads", filename);
+  fs.unlink(filePath, (err) => {
+    if (err && err.code !== 'ENOENT') {
+      console.error("Error deleting image:", err);
+    }
+  });
 };
 
 exports.getPostById = async (req, res) => {

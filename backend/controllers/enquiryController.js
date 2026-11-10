@@ -1,40 +1,74 @@
 const Enquiry = require("../models/Enquiry");
 
-// @desc    Submit a new contact enquiry
-// @route   POST /api/email/send
+const TYPES = ["contact", "career", "dealer"];
+const EMAIL_RX = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+const PHONE_RX = /^[+\d][\d\s\-()]{6,18}$/;
+
+const str = (v, max) => (typeof v === "string" ? v.trim().slice(0, max) : "");
+
+// @desc    Submit a public enquiry (contact form / job application / dealer enquiry)
+// @route   POST /api/enquiry/send            (rate-limited, see routes)
 exports.sendEnquiry = async (req, res) => {
   try {
-    const { name, email, message } = req.body;
+    const b = req.body || {};
 
-    if (!name || !email || !message) {
-      return res.status(400).json({ message: "All fields are required." });
+    // Honeypot: real users never see/fill this hidden field, bots usually do.
+    // Pretend it worked so bots don't learn they were blocked.
+    if (str(b.website, 200)) return res.status(201).json({ success: true, message: "Message sent successfully!" });
+
+    const type = TYPES.includes(b.type) ? b.type : "contact";
+    const name = str(b.name, 120);
+    const email = str(b.email, 160).toLowerCase();
+    const phone = str(b.phone, 20);
+    const message = str(b.message, 3000);
+
+    if (name.length < 2) return res.status(400).json({ success: false, message: "Please enter your name." });
+    if (!EMAIL_RX.test(email)) return res.status(400).json({ success: false, message: "Please enter a valid email address." });
+    if (phone && !PHONE_RX.test(phone)) return res.status(400).json({ success: false, message: "Please enter a valid phone number." });
+    if (type === "career" && !phone) return res.status(400).json({ success: false, message: "Phone number is required for job applications." });
+    if (type !== "career" && message.length < 5) return res.status(400).json({ success: false, message: "Please write a short message." });
+
+    let resumeUrl = str(b.resumeUrl, 500);
+    if (resumeUrl && !/^https?:\/\/[^\s]+$/i.test(resumeUrl)) {
+      return res.status(400).json({ success: false, message: "Resume link must start with http:// or https://" });
     }
 
-    const newEnquiry = await Enquiry.create({ name, email, message });
-
-    res.status(201).json({
-      success: true,
-      message: "Message sent successfully!",
-      data: newEnquiry,
+    await Enquiry.create({
+      name, email, phone, message, type,
+      subject: str(b.subject, 160),
+      position: str(b.position, 160),
+      experience: str(b.experience, 60),
+      resumeUrl,
     });
+
+    // Don't echo the stored document back to the public caller
+    res.status(201).json({ success: true, message: "Message sent successfully!" });
   } catch (error) {
-    res.status(500).json({ message: "Server Error. Please try again.", error: error.message });
+    res.status(500).json({ success: false, message: "Server error. Please try again." });
   }
 };
 
-// @desc    Get all enquiries for CMS
-// @route   GET /api/email/send
+// @desc    Get all enquiries for CMS  (admin only)   ?type=contact|career|dealer
+// @route   GET /api/enquiry/send
 exports.getAllEnquiries = async (req, res) => {
   try {
-    const enquiries = await Enquiry.find().sort({ createdAt: -1 });
+    const filter = {};
+    const t = req.query.type;
+    if (t === "contact") {
+      // Old documents have no `type` field — they are contact messages
+      filter.$or = [{ type: "contact" }, { type: { $exists: false } }];
+    } else if (TYPES.includes(t)) {
+      filter.type = t;
+    }
+    const enquiries = await Enquiry.find(filter).sort({ createdAt: -1 });
     res.status(200).json(enquiries);
   } catch (error) {
-    res.status(500).json({ message: "Failed to fetch enquiries.", error: error.message });
+    res.status(500).json({ message: "Failed to fetch enquiries." });
   }
 };
 
-// @desc    Delete an enquiry
-// @route   DELETE /api/email/delete/:id
+// @desc    Delete an enquiry (admin only)
+// @route   DELETE /api/enquiry/delete/:id
 exports.deleteEnquiry = async (req, res) => {
   try {
     const { id } = req.params;
@@ -46,6 +80,6 @@ exports.deleteEnquiry = async (req, res) => {
 
     res.status(200).json({ message: "Enquiry deleted successfully!" });
   } catch (error) {
-    res.status(500).json({ message: "Error deleting enquiry.", error: error.message });
+    res.status(500).json({ message: "Error deleting enquiry." });
   }
 };

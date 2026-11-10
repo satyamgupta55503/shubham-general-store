@@ -8,6 +8,8 @@ import { useCustomerAuth } from "@/context/CustomerAuthContext";
 import axios               from "axios";
 import toast               from "react-hot-toast";
 
+import { mediaUrl, optimizedImage } from "@/utils/mediaUrl";
+
 const API = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:5000";
 
 export default function ProductCard({ product }) {
@@ -111,7 +113,8 @@ export default function ProductCard({ product }) {
         }}>
           {product.thumbnail ? (
             <img
-              src={`${API}/${product.thumbnail}`}
+              src={optimizedImage(product.thumbnail, 400)}
+              loading="lazy"
               alt={product.name}
               style={{ width:"100%", height:"100%", objectFit:"cover" }}
             />

@@ -11,7 +11,9 @@ const NAV_LINKS = [
   { label: "Home",       href: "/" },
   { label: "Shop",       href: "/products" },
   { label: "Categories", href: "/categories" },
+  { label: "Brands",     href: "/brands" },
   { label: "Offers",     href: "/products?isFeatured=true" },
+  { label: "About",      href: "/about" },
 ];
 
 export default function StoreNavbar({ promoBar }) {

@@ -4,6 +4,8 @@ import axios        from "axios";
 import Link         from "next/link";
 import StoreLayout  from "@/components/store/layout/StoreLayout";
 
+import { optimizedImage } from "@/utils/mediaUrl";
+
 const API = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:5000";
 
 export default function CategoriesPage() {
@@ -48,7 +50,7 @@ export default function CategoriesPage() {
               <Link key={cat._id} href={`/categories/${cat.slug}`} className="cat-page-card">
                 <div style={{ width: 64, height: 64, borderRadius: 18, background: `${cat.color}15`, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 16, overflow: "hidden" }}>
                   {cat.image ? (
-                    <img src={`${API}/${cat.image}`} alt={cat.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                    <img src={optimizedImage(cat.image, 160)} alt={cat.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                   ) : (
                     <span style={{ fontSize: 26, fontWeight: 800, color: cat.color }}>{cat.name.charAt(0)}</span>
                   )}

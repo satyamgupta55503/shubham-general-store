@@ -1,0 +1,44 @@
+# Render deployment config for the Subham General Store backend (Express + MongoDB)
+# Render reads this file and sets up the service automatically.
+# Secrets (MONGO_URI, JWT_*) are NOT in this file — add them in the Render dashboard.
+services:
+  - type: web
+    name: subham-general-store-backend
+    runtime: node
+    rootDir: backend
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/store/homepage
+    envVars:
+      - key: NODE_ENV
+        value: production
+      # The following must be set in the Render dashboard (Environment tab):
+      #   MONGO_URI
+      #   JWT_SECRET
+      #   JWT_CRM_SECRET
+      #   JWT_HRM_SECRET
+      #   JWT_EMP_SECRET
+      #   JWT_CUSTOMER_SECRET
+      #   CORS_ORIGIN   (your Vercel frontend URL, e.g. https://your-store.vercel.app)
+      - key: MONGO_URI
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: JWT_CRM_SECRET
+        sync: false
+      - key: JWT_HRM_SECRET
+        sync: false
+      - key: JWT_EMP_SECRET
+        sync: false
+      - key: JWT_CUSTOMER_SECRET
+        sync: false
+      - key: CORS_ORIGIN
+        sync: false
+      # Cloudinary media storage (images, PDFs, videos) — set values in the dashboard
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false

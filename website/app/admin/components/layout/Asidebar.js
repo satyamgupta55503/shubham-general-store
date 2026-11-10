@@ -99,6 +99,20 @@ const Asidebar = ({ open = false, onClose }) => {
       roles: ["superadmin", "admin"],
     },
     {
+      id: "store-info",
+      name: "Store Info",
+      icon: FileText,
+      link: "/admin/store/settings",
+      roles: ["superadmin", "admin"],
+    },
+    {
+      id: "store-brands",
+      name: "Brands",
+      icon: Layers,
+      link: "/admin/store/brands",
+      roles: ["superadmin", "admin"],
+    },
+    {
       id: "store-orders",
       name: "Orders",
       icon: Briefcase,

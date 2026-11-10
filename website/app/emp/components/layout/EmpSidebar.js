@@ -7,6 +7,8 @@ import {
   User, Bell, X, Sun, Megaphone, Users, ClipboardList
 } from "lucide-react";
 
+import { mediaUrl } from "@/utils/mediaUrl";
+
 const BASE = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:5000";
 
 const navItems = [
@@ -113,7 +115,7 @@ export default function EmpSidebar({ mobileOpen, onClose }) {
             {/* ✅ Show actual photo if HR uploaded one */}
             {emp.profile_image ? (
               <img
-                src={`${BASE}/${emp.profile_image}`}
+                src={mediaUrl(emp.profile_image)}
                 alt={emp.full_name}
                 style={{ width:36,height:36,borderRadius:"50%",objectFit:"cover",border:"2px solid #dbeafe",flexShrink:0 }}
                 onError={e => { e.target.style.display="none"; }}

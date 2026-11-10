@@ -263,7 +263,7 @@ export default function SlidesPage() {
                   </td>
                   <td style={tdStyle}>
                     {slide.backgroundImage ? (
-                      <img src={`${UPLOADS_URL}/${slide.backgroundImage}`} alt="" style={{ width: "40px", height: "28px", objectFit: "cover", borderRadius: "4px" }} />
+                      <img src={/^https?:\/\//.test(slide.backgroundImage) ? slide.backgroundImage : `${UPLOADS_URL}/${slide.backgroundImage}`} alt="" style={{ width: "40px", height: "28px", objectFit: "cover", borderRadius: "4px" }} />
                     ) : (
                       <label style={{ cursor: "pointer", fontSize: "10px", color: "#6b7280", background: "#f3f4f6", padding: "4px 8px", borderRadius: "4px" }}>
                         Upload

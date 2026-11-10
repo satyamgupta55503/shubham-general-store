@@ -66,10 +66,12 @@ exports.uploadImage = async (req, res) => {
     if (!req.file) {
       return res.status(400).json({ success: false, message: "No image uploaded" });
     }
-    // Return the public path (served via /uploads static)
-    const imagePath = `uploads/${req.file.filename}`;
-    res.json({ success: true, path: imagePath, url: `${req.protocol}://${req.get("host")}/${imagePath}` });
+    // Stored on Cloudinary → permanent HTTPS URL (survives server restarts)
+    const { uploadToCloud } = require("../../middleware/mediaUpload");
+    const result = await uploadToCloud(req.file, "subham-store/homepage");
+    res.json({ success: true, path: result.url, url: result.url });
   } catch (err) {
-    res.status(500).json({ success: false, message: err.message });
+    const status = /not configured/i.test(err.message) ? 503 : 400;
+    res.status(status).json({ success: false, message: err.message });
   }
 };

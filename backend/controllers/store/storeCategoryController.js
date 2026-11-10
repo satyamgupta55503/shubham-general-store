@@ -69,6 +69,15 @@ exports.updateCategory = async (req, res) => {
 // DELETE /api/store/admin/categories/:id
 exports.deleteCategory = async (req, res) => {
   try {
+    // Don't orphan products: a category that still has products can't be deleted
+    const Product = require("../../models/store/Product");
+    const inUse = await Product.countDocuments({ category: req.params.id });
+    if (inUse > 0) {
+      return res.status(400).json({
+        success: false,
+        message: `${inUse} product(s) still use this category. Move or delete them first, or just mark the category inactive.`,
+      });
+    }
     const cat = await GroceryCategory.findByIdAndDelete(req.params.id);
     if (!cat) return res.status(404).json({ success: false, message: "Category not found" });
     res.json({ success: true, message: "Category deleted" });

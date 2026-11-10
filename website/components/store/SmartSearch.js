@@ -3,6 +3,8 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 
+import { optimizedImage } from "@/utils/mediaUrl";
+
 const API = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:5000";
 
 /**
@@ -19,7 +21,7 @@ const API = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:5000";
 export default function SmartSearch({ variant = "desktop", onNavigate }) {
   const router = useRouter();
   const [query, setQuery] = useState("");
-  const [results, setResults] = useState({ products: [], categories: [] });
+  const [results, setResults] = useState({ products: [], categories: [], brands: [] });
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [active, setActive] = useState(-1); // highlighted index for keyboard nav
@@ -30,7 +32,9 @@ export default function SmartSearch({ variant = "desktop", onNavigate }) {
   const reqIdRef = useRef(0);
 
   // Flatten results into a single ordered list for keyboard nav
+  const brandList = results.brands || [];
   const flat = [
+    ...brandList.map((b) => ({ type: "brand", item: b })),
     ...results.categories.map((c) => ({ type: "category", item: c })),
     ...results.products.map((p) => ({ type: "product", item: p })),
   ];
@@ -42,12 +46,12 @@ export default function SmartSearch({ variant = "desktop", onNavigate }) {
       .get(`${API}/api/store/products/suggest`, { params: { q } })
       .then((r) => {
         if (id !== reqIdRef.current) return; // stale response, ignore
-        setResults(r.data.data || { products: [], categories: [] });
+        setResults(r.data.data || { products: [], categories: [], brands: [] });
         setOpen(true);
       })
       .catch(() => {
         if (id !== reqIdRef.current) return;
-        setResults({ products: [], categories: [] });
+        setResults({ products: [], categories: [], brands: [] });
       })
       .finally(() => {
         if (id === reqIdRef.current) setLoading(false);
@@ -59,7 +63,7 @@ export default function SmartSearch({ variant = "desktop", onNavigate }) {
     clearTimeout(debounceRef.current);
     const q = query.trim();
     if (q.length < 1) {
-      setResults({ products: [], categories: [] });
+      setResults({ products: [], categories: [], brands: [] });
       setOpen(false);
       setLoading(false);
       return;
@@ -87,6 +91,7 @@ export default function SmartSearch({ variant = "desktop", onNavigate }) {
 
   const goToResult = (entry) => {
     if (entry.type === "product") go(`/products/${entry.item.slug}`);
+    else if (entry.type === "brand") go(`/brands/${entry.item.slug}`);
     else go(`/categories/${entry.item.slug}`);
   };
 
@@ -193,12 +198,44 @@ export default function SmartSearch({ variant = "desktop", onNavigate }) {
             </div>
           ) : (
             <>
+              {/* Brands */}
+              {brandList.length > 0 && (
+                <div>
+                  <div style={groupLabel}>Brands</div>
+                  {brandList.map((b, idx) => (
+                    <button
+                      key={b._id}
+                      type="button"
+                      role="option"
+                      aria-selected={active === idx}
+                      onMouseEnter={() => setActive(idx)}
+                      onClick={() => go(`/brands/${b.slug}`)}
+                      style={rowStyle(active === idx)}
+                    >
+                      <span style={{
+                        width: 30, height: 30, borderRadius: 8, flexShrink: 0, overflow: "hidden",
+                        background: b.logo ? "#fff" : (b.color || "#16a34a"),
+                        border: b.logo ? "1px solid #eef0f2" : "none",
+                        display: "flex", alignItems: "center", justifyContent: "center",
+                        color: "#fff", fontWeight: 900, fontSize: 13,
+                      }}>
+                        {b.logo
+                          ? <img src={optimizedImage(b.logo, 60)} alt="" style={{ width: "100%", height: "100%", objectFit: "contain" }} />
+                          : b.name.charAt(0).toUpperCase()}
+                      </span>
+                      <span style={{ fontSize: 13.5, color: "#374151", fontWeight: 600 }}>{highlight(b.name)}</span>
+                      <span style={{ marginLeft: "auto", fontSize: 11, color: "#9ca3af" }}>Brand</span>
+                    </button>
+                  ))}
+                </div>
+              )}
+
               {/* Categories */}
               {results.categories.length > 0 && (
                 <div>
                   <div style={groupLabel}>Categories</div>
                   {results.categories.map((c, idx) => {
-                    const i = idx;
+                    const i = brandList.length + idx;
                     return (
                       <button
                         key={c._id}
@@ -232,7 +269,7 @@ export default function SmartSearch({ variant = "desktop", onNavigate }) {
                 <div>
                   <div style={groupLabel}>Products</div>
                   {results.products.map((p, idx) => {
-                    const i = results.categories.length + idx;
+                    const i = brandList.length + results.categories.length + idx;
                     return (
                       <button
                         key={p._id}
@@ -248,7 +285,7 @@ export default function SmartSearch({ variant = "desktop", onNavigate }) {
                           background: "#f9fafb", display: "flex", alignItems: "center", justifyContent: "center",
                         }}>
                           {p.thumbnail ? (
-                            <img src={`${API}/${p.thumbnail}`} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                            <img src={optimizedImage(p.thumbnail, 80)} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                           ) : (
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#86efac" strokeWidth="1.5">
                               <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" /><line x1="3" y1="6" x2="21" y2="6" /><path d="M16 10a4 4 0 0 1-8 0" />

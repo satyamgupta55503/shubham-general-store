@@ -7,6 +7,8 @@ import StoreLayout from "@/components/store/layout/StoreLayout";
 import { useCustomerAuth } from "@/context/CustomerAuthContext";
 import toast from "react-hot-toast";
 
+import { optimizedImage } from "@/utils/mediaUrl";
+
 const API = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:5000";
 
 const STATUS_STEPS = ["placed","confirmed","processing","shipped","out_for_delivery","delivered"];
@@ -184,7 +186,7 @@ function OrderDetailContent() {
                     fontSize:24, flexShrink:0,
                   }}>
                     {item.thumbnail ? (
-                      <img src={`${API}/${item.thumbnail}`} alt={item.name} style={{ width:"100%", height:"100%", objectFit:"cover", borderRadius:10 }} />
+                      <img src={optimizedImage(item.thumbnail, 200)} alt={item.name} style={{ width:"100%", height:"100%", objectFit:"cover", borderRadius:10 }} />
                     ) : ""}
                   </div>
                   <div style={{ flex:1 }}>

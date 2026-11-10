@@ -7,7 +7,7 @@ const Customer = require("../../models/store/Customer");
 exports.getProducts = async (req, res) => {
   try {
     const {
-      category, search, minPrice, maxPrice,
+      category, brand, line, search, minPrice, maxPrice,
       isFeatured, isBestSeller, isNewArrival, isOrganic, isVeg,
       sort = "createdAt", order = "desc",
       page = 1, limit = 20,
@@ -15,6 +15,8 @@ exports.getProducts = async (req, res) => {
 
     const filter = { isActive: true };
     if (category)     filter.category    = category;
+    if (brand)        filter.brandRef    = brand;        // Brand _id
+    if (line)         filter.brandLine   = line;         // brand product-line slug
     if (isFeatured)   filter.isFeatured  = true;
     if (isBestSeller) filter.isBestSeller= true;
     if (isNewArrival) filter.isNewArrival= true;
@@ -37,6 +39,7 @@ exports.getProducts = async (req, res) => {
     const [products, total] = await Promise.all([
       Product.find(filter)
         .populate("category", "name slug color icon")
+        .populate("brandRef", "name slug logo color")
         .sort(sortObj)
         .skip(skip)
         .limit(Number(limit))
@@ -64,6 +67,7 @@ exports.getProductBySlug = async (req, res) => {
   try {
     const product = await Product.findOne({ slug: req.params.slug, isActive: true })
       .populate("category", "name slug color icon")
+      .populate("brandRef", "name slug logo color isDealer productLines")
       .populate("reviews.customer", "name avatar");
     if (!product) return res.status(404).json({ success: false, message: "Product not found" });
     res.json({ success: true, data: product });
@@ -78,15 +82,16 @@ exports.getProductBySlug = async (req, res) => {
 exports.suggest = async (req, res) => {
   try {
     const q = (req.query.q || "").trim();
-    if (q.length < 1) return res.json({ success: true, data: { products: [], categories: [] } });
+    if (q.length < 1) return res.json({ success: true, data: { products: [], categories: [], brands: [] } });
 
     // Escape regex special chars so user input can't break the query
     const safe = q.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
     const rx = new RegExp(safe, "i");
 
     const Category = require("../../models/store/GroceryCategory");
+    const Brand    = require("../../models/store/Brand");
 
-    const [products, categories] = await Promise.all([
+    const [products, categories, brands] = await Promise.all([
       Product.find({
         isActive: true,
         $or: [{ name: rx }, { shortDesc: rx }, { brand: rx }, { tags: rx }],
@@ -99,9 +104,13 @@ exports.suggest = async (req, res) => {
         .sort({ sortOrder: 1 })
         .limit(4)
         .select("name slug color icon"),
+      Brand.find({ isActive: true, name: rx })
+        .sort({ sortOrder: 1 })
+        .limit(3)
+        .select("name slug logo color"),
     ]);
 
-    res.json({ success: true, data: { products, categories } });
+    res.json({ success: true, data: { products, categories, brands } });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
   }
@@ -216,7 +225,7 @@ exports.adminGetProducts = async (req, res) => {
 
     const skip = (Number(page) - 1) * Number(limit);
     const [products, total] = await Promise.all([
-      Product.find(filter).populate("category", "name slug").sort({ createdAt: -1 }).skip(skip).limit(Number(limit)),
+      Product.find(filter).populate("category", "name slug").populate("brandRef", "name slug").sort({ createdAt: -1 }).skip(skip).limit(Number(limit)),
       Product.countDocuments(filter),
     ]);
     res.json({ success: true, data: products, pagination: { total, page: Number(page), limit: Number(limit), pages: Math.ceil(total / Number(limit)) } });
@@ -225,12 +234,30 @@ exports.adminGetProducts = async (req, res) => {
   }
 };
 
+// Normalise brand fields from the admin form:
+//  - "" → null (avoids ObjectId cast errors)
+//  - keep the plain-text `brand` in sync with the linked Brand (used by search)
+//  - clear brandLine when no brand is selected
+const normaliseBrand = async (body) => {
+  if (body.brandRef === "" || body.brandRef === undefined) {
+    if ("brandRef" in body) body.brandRef = null;
+  }
+  if (body.brandRef) {
+    const Brand = require("../../models/store/Brand");
+    const b = await Brand.findById(body.brandRef).select("name");
+    if (b) body.brand = b.name;
+  } else if ("brandRef" in body) {
+    body.brandLine = "";
+  }
+  return body;
+};
+
 // POST /api/store/admin/products
 exports.createProduct = async (req, res) => {
   try {
     const exists = await Product.findOne({ slug: req.body.slug });
     if (exists) return res.status(400).json({ success: false, message: "Slug already exists" });
-    const product = await Product.create(req.body);
+    const product = await Product.create(await normaliseBrand(req.body));
     res.status(201).json({ success: true, data: product });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
@@ -240,7 +267,7 @@ exports.createProduct = async (req, res) => {
 // PUT /api/store/admin/products/:id
 exports.updateProduct = async (req, res) => {
   try {
-    const product = await Product.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
+    const product = await Product.findByIdAndUpdate(req.params.id, await normaliseBrand(req.body), { new: true, runValidators: true });
     if (!product) return res.status(404).json({ success: false, message: "Product not found" });
     res.json({ success: true, data: product });
   } catch (err) {

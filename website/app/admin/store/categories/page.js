@@ -3,6 +3,7 @@ import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { Toaster } from "react-hot-toast";
+import MediaUploader from "@/components/admin/MediaUploader";
 
 const API = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:5000";
 const getToken = () => typeof window !== "undefined" ? localStorage.getItem("token") : "";
@@ -17,7 +18,7 @@ export default function AdminCategoriesPage() {
   const [editItem,setEditItem]= useState(null);
   const [saving,  setSaving]  = useState(false);
 
-  const emptyForm = { name:"", slug:"", description:"", icon:"🛒", color:"#16a34a", sortOrder:0, isActive:true, isFeatured:false };
+  const emptyForm = { name:"", slug:"", description:"", image:"", icon:"🛒", color:"#16a34a", sortOrder:0, isActive:true, isFeatured:false };
   const [form, setForm] = useState(emptyForm);
 
   const load = useCallback(() => {
@@ -33,7 +34,7 @@ export default function AdminCategoriesPage() {
   const openAdd  = () => { setEditItem(null); setForm(emptyForm); setShowForm(true); };
   const openEdit = (c) => {
     setEditItem(c);
-    setForm({ name:c.name, slug:c.slug, description:c.description||"", icon:c.icon||"🛒", color:c.color||"#16a34a", sortOrder:c.sortOrder||0, isActive:c.isActive, isFeatured:c.isFeatured });
+    setForm({ name:c.name, slug:c.slug, description:c.description||"", image:c.image||"", icon:c.icon||"🛒", color:c.color||"#16a34a", sortOrder:c.sortOrder||0, isActive:c.isActive, isFeatured:c.isFeatured });
     setShowForm(true);
   };
 
@@ -162,6 +163,10 @@ export default function AdminCategoriesPage() {
                       style={{ ...inp, width:60 }} placeholder="or type" />
                   </div>
                 </div>
+
+                {/* Category image — stored on Cloudinary */}
+                <MediaUploader kind="image" folder="categories" label="Category image (optional)"
+                  value={form.image} onChange={v=>setForm(f=>({...f,image:v}))} />
 
                 {/* Color picker */}
                 <div>

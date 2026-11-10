@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import EMP_API from "@/utils/empApi";
+import { mediaUrl } from "@/utils/mediaUrl";
 
 export default function EmpProfilePage() {
   const [emp,    setEmp]    = useState(null);
@@ -48,7 +49,7 @@ export default function EmpProfilePage() {
       <div style={{ background:"#fff",border:"1px solid #e2e8f0",borderRadius:14,padding:24,marginBottom:24,display:"flex",alignItems:"center",gap:20,flexWrap:"wrap" }}>
         {emp.profile_image ? (
           <img
-            src={`${process.env.NEXT_PUBLIC_BACKEND_URL||"http://localhost:5000"}/${emp.profile_image}`}
+            src={mediaUrl(emp.profile_image)}
             alt={emp.full_name}
             style={{ width:72,height:72,borderRadius:"50%",objectFit:"cover",border:"3px solid #dbeafe",flexShrink:0 }}
           />
