@@ -51,6 +51,16 @@ export default function AdminCustomersPage() {
     } catch (e) { toast.error(e.response?.data?.message || "Failed"); }
   };
 
+  const deleteCustomer = async (c) => {
+    if (!confirm(`Delete customer "${c.name}" (${c.email}) permanently?\n\nThis cannot be undone. Customers with orders or khata entries cannot be deleted - suspend them instead.`)) return;
+    try {
+      await axios.delete(`${API}/api/store/customers/admin/${c._id}`, authHdr());
+      toast.success("Customer deleted");
+      if (detailId === c._id) setDetailId(null);
+      load();
+    } catch (e) { toast.error(e.response?.data?.message || "Delete failed", { duration: 6000 }); }
+  };
+
   return (
     <div style={{ padding: 24 }}>
       <Toaster position="top-right" />
@@ -142,6 +152,16 @@ export default function AdminCustomersPage() {
                           {c.isActive ? "Suspend" : "Activate"}
                         </button>
                       )}
+                      {canWrite && c.isApproved && (
+                        <button
+                          onClick={() => deleteCustomer(c)}
+                          aria-label={`Delete customer ${c.name}`}
+                          title="Delete customer permanently"
+                          style={{ ...btnSm("#fff", "#dc2626"), border: "1px solid #fecaca" }}
+                        >
+                          Delete
+                        </button>
+                      )}
                     </div>
                   </td>
                 </tr>
@@ -167,7 +187,12 @@ export default function AdminCustomersPage() {
 
       {/* Detail drawer */}
       {detailId && (
-        <CustomerDetailDrawer customerId={detailId} canWrite={canWrite} onClose={() => { setDetailId(null); load(); }} />
+        <CustomerDetailDrawer
+          customerId={detailId}
+          canWrite={canWrite}
+          onDelete={(c) => deleteCustomer(c)}
+          onClose={() => { setDetailId(null); load(); }}
+        />
       )}
     </div>
   );
@@ -213,7 +238,7 @@ function ApproveButton({ id, type, onDone }) {
 }
 
 // ── Customer detail + ledger drawer ──
-function CustomerDetailDrawer({ customerId, canWrite, onClose }) {
+function CustomerDetailDrawer({ customerId, canWrite, onClose, onDelete }) {
   const [customer, setCustomer] = useState(null);
   const [ledger, setLedger]     = useState(null);
   const [orders, setOrders]     = useState([]);
@@ -274,6 +299,14 @@ function CustomerDetailDrawer({ customerId, canWrite, onClose }) {
                   <MetaItem label="GSTIN" value={customer.gstin || "—"} />
                   <MetaItem label="Credit Limit" value={`₹${customer.creditLimit || 0}`} />
                 </div>
+              )}
+              {canWrite && customer.isApproved && onDelete && (
+                <button
+                  onClick={() => onDelete(customer)}
+                  style={{ ...btnSm("#fef2f2", "#dc2626"), marginTop: 14, padding: "7px 14px" }}
+                >
+                  Delete customer
+                </button>
               )}
             </div>
 

@@ -268,7 +268,7 @@ export default function AdminProductsPage() {
                 </div>
                 <FormField label="Stock Qty" value={form.stockQty}  type="number" onChange={v => setForm(f=>({...f,stockQty:v}))} />
                 <FormField label="Weight (g)"value={form.weight}    type="number" onChange={v => setForm(f=>({...f,weight:v}))} />
-                <FormField label="Tags (comma separated)" value={form.tags} onChange={v=>setForm(f=>({...f,tags:v}))} full placeholder="e.g. fresh, organic, local" />
+                <FormField label="Tags (comma separated)" value={form.tags} onChange={v=>setForm(f=>({...f,tags:v}))} full placeholder="e.g. biscuits, family pack, wholesale" />
 
                 {/* Media — stored on Cloudinary */}
                 <div style={{ gridColumn:"1/-1", borderTop:"1px solid #f3f4f6", paddingTop:14 }}>

@@ -18,7 +18,7 @@ const NAV_LINKS = [
 
 export default function StoreNavbar({ promoBar }) {
   const promoBarEnabled = promoBar?.enabled ?? true;
-  const promoBarText    = promoBar?.text || "Free delivery on orders above ₹499 | 100% Fresh & Natural";
+  const promoBarText    = promoBar?.text || "फुटकर और थोक दोनों उपलब्ध  |  Retail & Wholesale Kirana, Chirmiri";
   const [scrolled,    setScrolled]    = useState(false);
   const [mobileOpen,  setMobileOpen]  = useState(false);
   const [accountOpen, setAccountOpen] = useState(false);

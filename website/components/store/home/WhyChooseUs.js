@@ -41,12 +41,12 @@ const Icons = {
 };
 
 const FEATURES = [
-  { icon: Icons.leaf,   title: "100% Fresh & Natural", desc: "All products sourced directly from local farms and trusted suppliers. No preservatives, no artificial additives.", color: "#16a34a", cls: "why-green"  },
-  { icon: Icons.truck,  title: "Fast Delivery",        desc: "Get your groceries delivered within 2-4 hours. Same-day delivery available in select areas.",                      color: "#2563eb", cls: "why-blue"   },
-  { icon: Icons.tag,    title: "Best Prices",          desc: "We offer the most competitive prices in town. Compare and save more on every purchase.",                           color: "#ea580c", cls: "why-orange" },
-  { icon: Icons.shield, title: "Quality Guaranteed",   desc: "Every item is quality-checked before packaging. Not satisfied? We offer 100% free returns.",                      color: "#7c3aed", cls: "why-purple" },
+  { icon: Icons.leaf,   title: "Genuine Brands", desc: "Packaged products from trusted FMCG brands, sourced from authorised suppliers. Sealed packs, correct MRP.", color: "#16a34a", cls: "why-green"  },
+  { icon: Icons.truck,  title: "Footkar & Thok",       desc: "Buy a single pack at retail rate or order in bulk at wholesale (thok) rates for your own shop.",                      color: "#2563eb", cls: "why-blue"   },
+  { icon: Icons.tag,    title: "Best Prices",          desc: "Competitive rates on daily kirana items. Bigger quantity means better thok pricing.",                           color: "#ea580c", cls: "why-orange" },
+  { icon: Icons.shield, title: "Quality Guaranteed",   desc: "Every item is checked before packing. If something is damaged or wrong, tell us and we will sort it out.",                      color: "#7c3aed", cls: "why-purple" },
   { icon: Icons.phone,  title: "Easy Ordering",        desc: "Order in seconds from your mobile or desktop. Track your order live with real-time updates.",                      color: "#0891b2", cls: "why-cyan"   },
-  { icon: Icons.users,  title: "Trusted by 1000+",     desc: "Over 1000 happy families trust Subham General Store for their daily grocery needs.",                              color: "#d97706", cls: "why-amber"  },
+  { icon: Icons.users,  title: "Local & Trusted",       desc: "Subham General Store is a local kirana and wholesale seller serving homes and shops in Chirmiri.",                              color: "#d97706", cls: "why-amber"  },
 ];
 
 export default function WhyChooseUs() {
@@ -55,13 +55,13 @@ export default function WhyChooseUs() {
       <div style={{ maxWidth: 1280, margin: "0 auto" }}>
         <div style={{ textAlign: "center", marginBottom: 48 }}>
           <span style={{ fontSize: 12, fontWeight: 700, color: "#16a34a", letterSpacing: ".1em", textTransform: "uppercase" }}>
-            Why Subham Store?
+            हमें क्यों चुनें  |  Why Subham Store
           </span>
           <h2 style={{ fontSize: "clamp(24px,4vw,32px)", fontWeight: 900, color: "#111827", margin: "8px 0 12px", letterSpacing: "-.03em" }}>
-            The Freshest Difference
+            किराना का भरोसा, सही दाम के साथ
           </h2>
           <p style={{ fontSize: 15, color: "#6b7280", maxWidth: 520, margin: "0 auto", lineHeight: 1.7 }}>
-            We're not just an online store — we're your neighbourhood's trusted grocery partner, now available 24/7.
+            Your local kirana and wholesale seller, now online. Order for your home or stock up for your shop.
           </p>
         </div>
 

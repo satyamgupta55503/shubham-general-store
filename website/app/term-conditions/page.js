@@ -4,7 +4,7 @@ import StoreLayout from "@/components/store/layout/StoreLayout";
 export const metadata = {
   title: "Terms & Conditions | Subham General Store",
   description:
-    "The terms that govern your use of Subham General Store and the purchase of groceries through our website.",
+    "The terms that govern your use of Subham General Store and the purchase of kirana products through our website.",
 };
 
 const SECTIONS = [

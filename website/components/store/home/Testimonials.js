@@ -1,19 +1,10 @@
 "use client";
 import { useState } from "react";
 
-const REVIEWS = [
-  { name: "Priya Sharma", loc: "Raipur",   rating: 5, text: "The vegetables are always fresh and the delivery is super fast! I've been ordering every week for the past 3 months. Highly recommended!", product: "Fresh Vegetables Pack" },
-  { name: "Rahul Verma",  loc: "Raipur",   rating: 5, text: "Prices are much better than local market and quality is excellent. The dairy products are fresh every morning. Love this store!",         product: "Dairy Combo Pack" },
-  { name: "Sunita Gupta", loc: "Bilaspur", rating: 5, text: "I ordered fruits for a family function and everything was fresh and perfectly ripe. The packaging was also very good. Will order again.",       product: "Seasonal Fruits Basket" },
-  { name: "Amit Patel",   loc: "Durg",     rating: 4, text: "Really convenient to order online. The site is easy to use and checkout is fast. Delivery arrived within 3 hours. Great experience overall.",    product: "Monthly Grocery Pack" },
-];
+// Add real customer reviews here. The section stays hidden while this list is empty.
+const REVIEWS = [];
 
-const STATS = [
-  { value: "1,000+", label: "Happy Customers" },
-  { value: "4.8/5",  label: "Average Rating" },
-  { value: "5,000+", label: "Orders Delivered" },
-  { value: "99%",    label: "Fresh Guarantee" },
-];
+const STATS = [];
 
 // Filled star SVG
 function Star({ filled }) {
@@ -27,6 +18,7 @@ function Star({ filled }) {
 
 export default function Testimonials() {
   const [active, setActive] = useState(0);
+  if (!REVIEWS.length) return null;
 
   return (
     <section style={{ padding: "60px 20px", background: "linear-gradient(135deg,#f0fdf4,#dcfce7)" }}>

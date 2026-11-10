@@ -6,7 +6,7 @@ const mongoose = require("mongoose");
  */
 
 const HeroSlideSchema = new mongoose.Schema({
-  tag:       { type: String, default: "" },        // e.g. "Fresh & Organic"
+  tag:       { type: String, default: "" },        // e.g. "Kirana | Footkar & Thok"
   title:     { type: String, default: "" },        // supports \n line breaks
   description:{ type: String, default: "" },
   image:     { type: String, default: "" },        // uploaded image path
@@ -39,7 +39,7 @@ const StoreHomepageSchema = new mongoose.Schema(
     // ── Top promo bar ──
     promoBar: {
       enabled: { type: Boolean, default: true },
-      text:    { type: String, default: "Free delivery on orders above ₹499 | 100% Fresh & Natural" },
+      text:    { type: String, default: "Footkar & Thok dono available | Kirana ka poora saaman, sahi daam par" },
     },
 
     // ── Hero slides ──
@@ -63,25 +63,25 @@ const StoreHomepageSchema = new mongoose.Schema(
       showOffers:         { type: Boolean, default: true },
       showBestSellers:    { type: Boolean, default: true },
       showWhyChooseUs:    { type: Boolean, default: true },
-      showTestimonials:   { type: Boolean, default: true },
+      showTestimonials:   { type: Boolean, default: false },
       showNewsletter:     { type: Boolean, default: true },
     },
 
     // ── Section headings (editable) ──
     headings: {
       categoriesTitle:    { type: String, default: "Shop by Category" },
-      categoriesSubtitle: { type: String, default: "Explore our wide range of fresh categories" },
+      categoriesSubtitle: { type: String, default: "Explore our kirana range" },
       featuredTitle:      { type: String, default: "Featured Products" },
       featuredSubtitle:   { type: String, default: "Our most popular picks this week" },
       offersTitle:        { type: String, default: "Today's Best Deals" },
       bestSellersTitle:   { type: String, default: "Best Sellers" },
-      bestSellersSubtitle:{ type: String, default: "Customers love these products" },
+      bestSellersSubtitle:{ type: String, default: "Most ordered by our customers" },
     },
 
     // ── Newsletter ──
     newsletter: {
-      heading:  { type: String, default: "Get 10% Off Your First Order!" },
-      subtext:  { type: String, default: "Subscribe to our newsletter and stay updated with fresh deals, new arrivals, and exclusive offers every week." },
+      heading:  { type: String, default: "Get Updates & Wholesale Rates" },
+      subtext:  { type: String, default: "Subscribe to stay updated on new arrivals, bulk (thok) rates and offers from Subham General Store." },
     },
   },
   { timestamps: true }

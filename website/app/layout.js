@@ -16,7 +16,7 @@ const urban = Urbanist({
 
 const poppins = Poppins({
   weight:  ["300","400","500","600","700","800"],
-  subsets: ["latin"],
+  subsets: ["latin", "devanagari"],   // devanagari → Hindi text renders in the same font
   variable:"--store-font",
   display: "swap",
   preload: false,
@@ -29,14 +29,14 @@ export const metadata = {
   metadataBase: new URL(BASE_URL),
 
   title: {
-    default:  "Subham General Store — Fresh Groceries Delivered",
+    default:  "Subham General Store — Kirana, Footkar & Thok Vikreta",
     template: "%s | Subham General Store",
   },
   description:
-    "Subham General Store — your trusted neighbourhood grocery store online. Shop fresh vegetables, fruits, dairy, snacks, and daily essentials. Fast delivery, best prices.",
+    "Subham General Store — kirana and wholesale (thok) + retail (footkar) seller in Chirmiri. Biscuits, namkeen, salt, home care, personal care and daily essentials from top brands at best prices.",
   keywords: [
-    "Subham General Store","online grocery","fresh vegetables online",
-    "grocery delivery","fruits online","dairy products","daily essentials",
+    "Subham General Store","online kirana","kirana wholesale","thok vikreta","footkar vikreta","Chirmiri",
+    "wholesale grocery","FMCG dealer","biscuits namkeen wholesale","daily essentials",
     "grocery store","subham gupta store","online kirana",
   ],
   authors:   [{ name: "Subham General Store", url: BASE_URL }],
@@ -51,15 +51,15 @@ export const metadata = {
     locale:      "en_IN",
     url:         BASE_URL,
     siteName:    "Subham General Store",
-    title:       "Subham General Store — Fresh Groceries Delivered",
-    description: "Shop fresh groceries, vegetables, fruits, dairy & daily essentials online.",
+    title:       "Subham General Store — Kirana, Footkar & Thok Vikreta",
+    description: "Kirana products at footkar (retail) and thok (wholesale) rates from top brands.",
     images: [{ url: OG_IMAGE, width: 1200, height: 630, alt: "Subham General Store" }],
   },
 
   twitter: {
     card:        "summary_large_image",
-    title:       "Subham General Store — Fresh Groceries Delivered",
-    description: "Shop fresh groceries online with fast delivery at best prices.",
+    title:       "Subham General Store — Kirana, Footkar & Thok Vikreta",
+    description: "Kirana products at footkar and thok rates, best prices.",
     images:      [OG_IMAGE],
   },
 

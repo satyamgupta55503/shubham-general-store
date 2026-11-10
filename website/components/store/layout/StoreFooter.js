@@ -11,12 +11,12 @@ const COMPANY_LINKS = [
 ];
 
 const CATEGORIES = [
-  { label: "Vegetables",   href: "/categories/vegetables"  },
-  { label: "Fruits",       href: "/categories/fruits"      },
-  { label: "Dairy & Eggs", href: "/categories/dairy-eggs"  },
-  { label: "Snacks",       href: "/categories/snacks"      },
-  { label: "Beverages",    href: "/categories/beverages"   },
-  { label: "Staples",      href: "/categories/staples"     },
+  { label: "Biscuits & Cookies", href: "/categories/biscuits-cookies" },
+  { label: "Namkeen & Snacks",   href: "/categories/namkeen-snacks" },
+  { label: "Home Care",          href: "/categories/home-care" },
+  { label: "Personal Care",      href: "/categories/personal-care" },
+  { label: "Salt & Staples",     href: "/categories/salt-staples" },
+  { label: "All Products",       href: "/products" },
 ];
 
 const HELP_LINKS = [
@@ -104,15 +104,15 @@ export default function StoreFooter() {
               <div>
                 <div style={{ fontWeight: 800, fontSize: 16 }}>Subham General Store</div>
                 <div style={{ fontSize: 11, color: "#86efac", letterSpacing: ".05em", textTransform: "uppercase" }}>
-                  Fresh • Natural • Local
+                  Kirana • Footkar • Thok
                 </div>
               </div>
             </div>
             <p style={{ fontSize: 13, color: "rgba(255,255,255,.55)", lineHeight: 1.7, margin: "0 0 20px" }}>
-              Your trusted neighbourhood grocery store, now online. Fresh produce, daily essentials and more — delivered fast to your door.
+              Your trusted local kirana and wholesale seller, now online. Daily essentials from top brands, at footkar and thok rates.
             </p>
             <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-              {["100% Fresh", "Fast Delivery", "Quality Assured"].map(b => (
+              {["Retail & Wholesale", "Genuine Brands", "Fair Prices"].map(b => (
                 <span key={b} style={{
                   fontSize: 11, fontWeight: 600,
                   background: "rgba(22,163,74,.15)",

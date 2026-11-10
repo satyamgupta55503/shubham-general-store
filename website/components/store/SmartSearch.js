@@ -145,7 +145,7 @@ export default function SmartSearch({ variant = "desktop", onNavigate }) {
         <input
           ref={inputRef}
           type="search"
-          placeholder={isMobile ? "Search groceries…" : "Search vegetables, fruits, dairy…"}
+          placeholder={isMobile ? "Search products…" : "Search biscuits, namkeen, soap, salt…"}
           value={query}
           onChange={(e) => { setQuery(e.target.value); setActive(-1); }}
           onFocus={() => { if (flat.length) setOpen(true); }}

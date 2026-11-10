@@ -13,7 +13,21 @@ const { cloudinary, ensureConfigured } = require("../config/cloudinary");
  * here (free plan allows 100 MB, but memory on a small server is limited).
  */
 const MB = 1024 * 1024;
-const LIMITS = { image: 10 * MB, pdf: 10 * MB, video: 50 * MB };
+const LIMITS = { image: 10 * MB, pdf: 10 * MB, video: 50 * MB, doc: 10 * MB };
+
+// Word documents (opt-in: only the Documents module accepts these)
+const DOC_MIMES = {
+  "application/msword": "doc",
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document": "docx",
+};
+// Documents module: PDF, Word, and jpg/png/webp images only
+const DOC_IMAGE_MIMES = ["image/jpeg", "image/png", "image/webp"];
+const docKindOf = (mimetype = "") => {
+  if (DOC_MIMES[mimetype]) return "doc";
+  if (mimetype === "application/pdf") return "pdf";
+  if (DOC_IMAGE_MIMES.includes(mimetype)) return "image";
+  return null;
+};
 
 const kindOf = (mimetype = "") => {
   if (mimetype.startsWith("image/")) return "image";
@@ -21,6 +35,15 @@ const kindOf = (mimetype = "") => {
   if (mimetype.startsWith("video/")) return "video";
   return null;
 };
+
+const docUpload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: LIMITS.doc, files: 10 },
+  fileFilter: (_req, file, cb) => {
+    if (docKindOf(file.mimetype)) return cb(null, true);
+    cb(new Error("Only PDF, Word (.doc, .docx) and image (jpg, png, webp) files are allowed"));
+  },
+});
 
 const upload = multer({
   storage: multer.memoryStorage(),
@@ -32,12 +55,12 @@ const upload = multer({
 });
 
 // Upload one in-memory file to Cloudinary. Returns a plain result object.
-const uploadToCloud = (file, folder = "subham-store") =>
+const uploadToCloud = (file, folder = "subham-store", opts = {}) =>
   new Promise((resolve, reject) => {
     if (!ensureConfigured()) {
       return reject(new Error("Cloudinary is not configured on the server"));
     }
-    const kind = kindOf(file.mimetype);
+    const kind = opts.docs ? docKindOf(file.mimetype) : kindOf(file.mimetype);
     if (!kind) return reject(new Error("Unsupported file type"));
     if (file.size > LIMITS[kind]) {
       return reject(new Error(`${kind.toUpperCase()} is too large (max ${LIMITS[kind] / MB} MB)`));
@@ -54,6 +77,10 @@ const uploadToCloud = (file, folder = "subham-store") =>
     const options = { folder };
     if (kind === "video") {
       options.resource_type = "video";
+    } else if (kind === "doc") {
+      const ext = DOC_MIMES[file.mimetype];
+      options.resource_type = "raw";
+      options.public_id = `${base}-${stamp}.${ext}`;
     } else if (kind === "pdf") {
       // PDFs go in as "raw" files; the public_id must carry the extension
       options.resource_type = "raw";
@@ -68,7 +95,7 @@ const uploadToCloud = (file, folder = "subham-store") =>
         url:           result.secure_url,
         public_id:     result.public_id,
         resource_type: result.resource_type,
-        format:        result.format || (kind === "pdf" ? "pdf" : ""),
+        format:        result.format || (kind === "pdf" ? "pdf" : kind === "doc" ? DOC_MIMES[file.mimetype] : ""),
         bytes:         result.bytes,
         width:         result.width,
         height:        result.height,
@@ -125,6 +152,7 @@ const handle = (mw) => (req, res, next) =>
 module.exports = {
   single: (field = "file") => handle(upload.single(field)),
   array:  (field = "files", max = 10) => handle(upload.array(field, max)),
+  docArray: (field = "files", max = 10) => handle(docUpload.array(field, max)),
   uploadToCloud,
   deleteFromCloud,
   deleteByUrl,

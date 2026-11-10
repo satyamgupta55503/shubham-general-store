@@ -51,7 +51,7 @@ export default function CategoryPageClient({ category }) {
             {category.name}
           </h1>
           <p style={{ fontSize: 14, color: "#6b7280", margin: 0 }}>
-            {category.description || `Shop fresh ${category.name.toLowerCase()}`}
+            {category.description || `Shop ${category.name}`}
             {pagination ? ` · ${pagination.total} products` : ""}
           </p>
         </div>

@@ -10,12 +10,12 @@ import JsonLd         from "@/components/store/seo/JsonLd";
 const BASE_URL = "https://www.subhamgeneralstore.com";
 
 export const metadata = {
-  title:       "Shop Fresh Groceries Online",
-  description: "Browse 500+ fresh groceries — vegetables, fruits, dairy, snacks and daily essentials at the best prices. Filter by category, price and more.",
+  title:       "Shop Kirana Products Online - Footkar & Thok",
+  description: "Browse kirana products - biscuits, namkeen, salt, home care and personal care from top brands at footkar and thok rates. Filter by category, brand, price and more.",
   alternates:  { canonical: `${BASE_URL}/products` },
   openGraph: {
-    title:       "Shop Fresh Groceries Online | Subham General Store",
-    description: "Browse fresh vegetables, fruits, dairy and more at best prices.",
+    title:       "Shop Kirana Products Online | Subham General Store",
+    description: "Browse biscuits, namkeen, home care and more at best prices.",
     url:         `${BASE_URL}/products`,
     type:        "website",
   },

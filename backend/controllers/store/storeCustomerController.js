@@ -285,6 +285,54 @@ exports.adminRejectCustomer = async (req, res) => {
   }
 };
 
+// DELETE /api/store/customers/admin/:id  — permanently delete a customer account
+// Blocked when the customer has orders or an open khata balance, so sales and
+// dues history is never lost (suspend those accounts instead).
+exports.adminDeleteCustomer = async (req, res) => {
+  try {
+    const mongoose = require("mongoose");
+    const { id } = req.params;
+    if (!mongoose.isValidObjectId(id))
+      return res.status(400).json({ success: false, message: "Invalid customer id" });
+
+    const customer = await Customer.findById(id);
+    if (!customer) return res.status(404).json({ success: false, message: "Customer not found" });
+
+    const Order  = require("../../models/store/Order");
+    const Ledger = require("../../models/store/Ledger");
+    const Cart   = require("../../models/store/Cart");
+
+    const orderCount = await Order.countDocuments({ customer: id });
+    if (orderCount > 0)
+      return res.status(409).json({
+        success: false,
+        message: `This customer has ${orderCount} order(s). Delete is blocked to keep sales records - suspend the account instead.`,
+      });
+
+    const ledger = await Ledger.findOne({ customer: id });
+    if (ledger && (ledger.entries?.length || 0) > 0)
+      return res.status(409).json({
+        success: false,
+        message: "This customer has khata (ledger) entries. Delete is blocked to keep payment records - suspend the account instead.",
+      });
+
+    // Unlink CRM documents (they stay in CRM, just no longer shown in this profile)
+    const unlink = { $set: { store_customer: null } };
+    const crmModels = ["../../models/crm/CrmQuotation", "../../models/crm/CrmInvoice", "../../models/crm/CrmOrderSheet"];
+    await Promise.all(crmModels.map((p) => require(p).updateMany({ store_customer: id }, unlink)));
+
+    await Promise.all([
+      Cart.deleteMany({ customer: id }),
+      ledger ? Ledger.deleteOne({ _id: ledger._id }) : null,
+    ]);
+    await Customer.findByIdAndDelete(id);
+
+    res.json({ success: true, message: "Customer deleted" });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+
 // PUT /api/store/admin/customers/:id  — admin edit customer (type, credit, business)
 exports.adminUpdateCustomer = async (req, res) => {
   try {

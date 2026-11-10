@@ -4,13 +4,13 @@ import toast from "react-hot-toast";
 
 export default function NewsletterBar({ initialData }) {
   const [email, setEmail] = useState("");
-  const heading = initialData?.newsletter?.heading || "Get 10% Off Your First Order!";
-  const subtext = initialData?.newsletter?.subtext || "Subscribe to our newsletter and stay updated with fresh deals, new arrivals, and exclusive offers every week.";
+  const heading = initialData?.newsletter?.heading || "Get Updates & Wholesale Rates";
+  const subtext = initialData?.newsletter?.subtext || "Subscribe to stay updated on new arrivals, bulk (thok) rates and offers from Subham General Store.";
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!email.trim()) return;
-    toast.success("Subscribed! Get 10% off your first order.");
+    toast.success("Subscribed! We will keep you updated.");
     setEmail("");
   };
 

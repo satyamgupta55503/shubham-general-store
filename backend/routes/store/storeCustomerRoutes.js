@@ -39,5 +39,6 @@ router.put   ("/admin/:id/status",            adminProtect, rbac("superadmin", "
 router.put   ("/admin/:id/approve",           adminProtect, rbac("superadmin", "admin"), ctrl.adminApproveWholesale);
 router.delete("/admin/:id/reject",            adminProtect, rbac("superadmin", "admin"), ctrl.adminRejectCustomer);
 router.put   ("/admin/:id",                   adminProtect, rbac("superadmin", "admin"), ctrl.adminUpdateCustomer);
+router.delete("/admin/:id",                   adminProtect, rbac("superadmin", "admin"), ctrl.adminDeleteCustomer);
 
 module.exports = router;

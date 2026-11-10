@@ -181,6 +181,7 @@ app.use("/api/store/customers",  require("./routes/store/storeCustomerRoutes"));
 app.use("/api/store/cart",       require("./routes/store/storeCartRoutes"));
 app.use("/api/store/orders",     require("./routes/store/storeOrderRoutes"));
 app.use("/api/store/ledger",     require("./routes/store/storeLedgerRoutes"));
+app.use("/api/store/documents",  require("./routes/store/storeDocumentRoutes"));
 
 // ══════════════════════════════════════════════════════════════════
 // 11. GLOBAL ERROR HANDLERS

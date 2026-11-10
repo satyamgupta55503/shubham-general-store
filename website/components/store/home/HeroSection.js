@@ -10,25 +10,32 @@ const API = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:5000";
 
 // Fallback slide if CMS has none yet
 const FALLBACK_SLIDES = [{
-  tag: "Fresh & Organic",
-  title: "Farm Fresh\nVegetables\nDelivered Daily",
-  description: "Straight from local farms to your kitchen. Fresh, healthy, and affordable groceries at your doorstep.",
+  tag: "किराना  •  फुटकर  •  थोक",
+  title: "घर हो या दुकान,\nहर सामान\nसही दाम पर",
+  description: "बिस्किट, नमकीन, नमक, साबुन-सर्फ और रोज़ की ज़रूरत का हर सामान — फुटकर और थोक दोनों रेट पर।\nRetail & wholesale kirana from trusted brands, Chirmiri.",
   image: "",
   accent: "#16a34a",
   bgGradient: "linear-gradient(135deg,#f0fdf4 0%,#dcfce7 55%,#bbf7d0 100%)",
-  cta1Label: "Shop Now",  cta1Link: "/products",
-  cta2Label: "View Categories", cta2Link: "/categories",
-  chips: ["Vegetables", "Fruits", "Dairy", "Staples"],
+  cta1Label: "अभी खरीदें", cta1Link: "/products",
+  cta2Label: "थोक रेट पूछें", cta2Link: "/contact",
+  chips: ["बिस्किट", "नमकीन", "साबुन", "डिटर्जेंट", "नमक"],
 }];
 
 const FALLBACK_STATS = [
-  { value: "500+",  label: "Products" },
-  { value: "1000+", label: "Customers" },
-  { value: "Free",  label: "Delivery ₹499+" },
+  { value: "फुटकर", label: "Retail rate" },
+  { value: "थोक",   label: "Wholesale rate" },
+  { value: "Top",   label: "Brands / ब्रांड" },
 ];
 
-// Turn a chip label into a sensible search link
-const chipHref = (label) => `/products?search=${encodeURIComponent(label)}`;
+// Hindi chip → English search term (product names in DB are English)
+const CHIP_SEARCH = {
+  "बिस्किट": "biscuit", "नमकीन": "namkeen", "साबुन": "soap",
+  "डिटर्जेंट": "detergent", "नमक": "salt", "तेल": "oil", "मसाले": "masala",
+};
+const chipHref = (label) => `/products?search=${encodeURIComponent(CHIP_SEARCH[label] || label)}`;
+
+// Devanagari needs taller line-height and no negative letter-spacing
+const hasHindi = (s = "") => /[\u0900-\u097F]/.test(s);
 
 export default function HeroSection({ initialData }) {
   const [slides, setSlides] = useState(
@@ -90,7 +97,7 @@ export default function HeroSection({ initialData }) {
               </span>
             )}
 
-            <h1 className="hx-title">{slide.title}</h1>
+            <h1 className={`hx-title${hasHindi(slide.title) ? " is-hi" : ""}`}>{slide.title}</h1>
 
             {slide.description && <p className="hx-desc">{slide.description}</p>}
 
@@ -98,16 +105,16 @@ export default function HeroSection({ initialData }) {
             <form onSubmit={handleSearch} className="hx-search" role="search">
               <input
                 type="search"
-                placeholder="Search groceries..."
+                placeholder="खोजें: biscuit, namkeen, soap, salt..."
                 value={query}
                 onChange={e => setQuery(e.target.value)}
-                aria-label="Search groceries"
+                aria-label="Search products"
               />
               <button type="submit" aria-label="Search">
                 <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" aria-hidden="true">
                   <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
                 </svg>
-                <span className="hx-search-text">Search</span>
+                <span className="hx-search-text">खोजें</span>
               </button>
             </form>
 
@@ -144,12 +151,19 @@ export default function HeroSection({ initialData }) {
               {slide.image ? (
                 <img
                   src={optimizedImage(slide.image, 900)}
-                  alt={slide.tag ? `${slide.tag} groceries` : "Fresh groceries"}
+                  alt={slide.tag ? `${slide.tag} groceries` : "Kirana products"}
                   loading="eager"
                   fetchPriority="high"
                 />
               ) : (
-                <GroceryArt />
+                <img
+                  src="/Freshkirana.png"
+                  alt="Kirana products - Nirma, Maggi, Amul, Tata Salt, Surf Excel, Colgate, onion, potato and rice"
+                  width={572}
+                  height={492}
+                  loading="eager"
+                  fetchPriority="high"
+                />
               )}
             </div>
 
@@ -198,54 +212,6 @@ function Leaf({ className }) {
   );
 }
 
-// ── Built-in illustration shown until a hero image is uploaded in CMS ──
-function GroceryArt() {
-  return (
-    <svg viewBox="0 0 400 360" className="hx-art" role="img" aria-label="Basket of fresh groceries">
-      <defs>
-        <linearGradient id="hxBg" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stopColor="#ecfdf5" /><stop offset="1" stopColor="#d1fae5" />
-        </linearGradient>
-        <linearGradient id="hxBag" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stopColor="#d6a86a" /><stop offset="1" stopColor="#b9854a" />
-        </linearGradient>
-      </defs>
-      <rect width="400" height="360" fill="url(#hxBg)" />
-      {/* shelf lines */}
-      <g opacity=".35" stroke="#86efac" strokeWidth="3">
-        <line x1="0" y1="70" x2="400" y2="70" /><line x1="0" y1="130" x2="400" y2="130" />
-      </g>
-      {/* bottle */}
-      <rect x="300" y="88" width="46" height="150" rx="14" fill="#facc15" />
-      <rect x="312" y="66" width="22" height="26" rx="5" fill="#16a34a" />
-      <rect x="300" y="140" width="46" height="44" fill="#fef9c3" opacity=".9" />
-      {/* box */}
-      <rect x="48" y="104" width="96" height="120" rx="8" fill="#2563eb" />
-      <rect x="58" y="130" width="76" height="34" rx="5" fill="#fff" />
-      <rect x="66" y="141" width="48" height="12" rx="3" fill="#2563eb" opacity=".8" />
-      {/* bag */}
-      <path d="M118 178h164l-16 150H134z" fill="url(#hxBag)" />
-      <path d="M160 178c0-30 80-30 80 0" stroke="#8a5a2b" strokeWidth="9" fill="none" strokeLinecap="round" />
-      {/* produce peeking out */}
-      <circle cx="160" cy="176" r="24" fill="#ef4444" />
-      <circle cx="166" cy="168" r="6" fill="#fff" opacity=".35" />
-      <path d="M160 150c4-10 12-14 18-14-2 8-8 14-18 14z" fill="#16a34a" />
-      <ellipse cx="208" cy="170" rx="30" ry="22" fill="#f59e0b" />
-      <ellipse cx="248" cy="178" rx="22" ry="18" fill="#a16207" opacity=".85" />
-      <path d="M232 150c10-20 30-22 40-18-8 14-24 22-40 18z" fill="#22c55e" />
-      <path d="M244 146c14-6 26 0 30 8" stroke="#15803d" strokeWidth="4" fill="none" />
-      {/* label on bag */}
-      <rect x="170" y="240" width="60" height="34" rx="8" fill="#fff" opacity=".9" />
-      <path d="M186 258l8 7 14-14" stroke="#16a34a" strokeWidth="4.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
-      {/* front onions/potatoes */}
-      <ellipse cx="78" cy="300" rx="34" ry="26" fill="#c2410c" opacity=".85" />
-      <ellipse cx="330" cy="300" rx="36" ry="24" fill="#d6a86a" />
-      <ellipse cx="300" cy="312" rx="26" ry="18" fill="#c08a4f" />
-      <rect x="0" y="330" width="400" height="30" fill="#bbf7d0" />
-    </svg>
-  );
-}
-
 const HERO_CSS = `
 .hx{position:relative;overflow:hidden;padding:40px 20px 36px;transition:background .5s ease}
 .hx-inner{position:relative;z-index:1;max-width:1240px;margin:0 auto}
@@ -261,7 +227,8 @@ const HERO_CSS = `
 /* copy */
 .hx-tag{display:inline-flex;align-items:center;gap:8px;background:#fff;color:var(--hx-accent);padding:7px 15px;border-radius:50px;font-size:12.5px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;box-shadow:0 4px 14px rgba(22,101,52,.1);margin-bottom:18px}
 .hx-title{font-size:clamp(34px,5.2vw,62px);font-weight:900;line-height:1.06;letter-spacing:-.035em;color:#0f2a1d;margin:0 0 18px;white-space:pre-line}
-.hx-desc{font-size:clamp(15px,1.6vw,17px);line-height:1.7;color:#3f4b45;margin:0 0 26px;max-width:480px}
+.hx-title.is-hi{line-height:1.3;letter-spacing:0;font-weight:800;font-size:clamp(32px,4.8vw,56px)}
+.hx-desc{font-size:clamp(15px,1.6vw,17px);line-height:1.75;color:#3f4b45;margin:0 0 26px;max-width:500px;white-space:pre-line}
 
 .hx-search{display:flex;max-width:480px;background:#fff;border-radius:14px;padding:5px;box-shadow:0 10px 30px rgba(15,42,29,.1);margin-bottom:20px}
 .hx-search input{flex:1;min-width:0;border:none;outline:none;background:transparent;padding:12px 14px;font-size:15px;color:#0f172a;font-family:inherit}

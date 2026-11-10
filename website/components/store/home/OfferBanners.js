@@ -8,9 +8,9 @@ import { optimizedImage } from "@/utils/mediaUrl";
 const API = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:5000";
 
 const FALLBACK = [
-  { tag: "Limited Offer",    title: "Fresh Vegetables\nUp to 30% OFF", subtitle: "Valid today only",     link: "/categories/vegetables",  bgGradient: "linear-gradient(135deg,#16a34a,#15803d)", image: "" },
-  { tag: "Daily Essentials", title: "Dairy & Eggs\nFlat 20% OFF",     subtitle: "On orders above ₹299", link: "/categories/dairy-eggs", bgGradient: "linear-gradient(135deg,#2563eb,#1d4ed8)", image: "" },
-  { tag: "Weekend Special",  title: "Fresh Fruits\nBuy 2 Get 1 Free", subtitle: "Selected items only",  link: "/categories/fruits",     bgGradient: "linear-gradient(135deg,#ea580c,#dc2626)", image: "" },
+  { tag: "थोक / Wholesale",   title: "दुकानदारों के लिए\nस्पेशल थोक रेट",  subtitle: "Bulk orders for shops at wholesale rates", link: "/contact",                     bgGradient: "linear-gradient(135deg,#16a34a,#15803d)", image: "" },
+  { tag: "रोज़ की ज़रूरत",       title: "बिस्किट और नमकीन\nटॉप ब्रांड्स",      subtitle: "Biscuits & namkeen from top brands",       link: "/categories/biscuits-cookies", bgGradient: "linear-gradient(135deg,#2563eb,#1d4ed8)", image: "" },
+  { tag: "Home Care",          title: "साबुन, सर्फ और सफ़ाई\nघर का हर सामान", subtitle: "Soap, detergent & cleaning essentials",    link: "/categories/home-care",        bgGradient: "linear-gradient(135deg,#ea580c,#dc2626)", image: "" },
 ];
 
 export default function OfferBanners({ initialData }) {
@@ -70,7 +70,7 @@ export default function OfferBanners({ initialData }) {
                   )}
                   <h3 style={{
                     fontSize: 22, fontWeight: 900, color: "#fff", margin: "0 0 6px",
-                    lineHeight: 1.2, whiteSpace: "pre-line", textShadow: "0 1px 4px rgba(0,0,0,.2)",
+                    lineHeight: 1.35, whiteSpace: "pre-line", textShadow: "0 1px 4px rgba(0,0,0,.2)",
                   }}>
                     {o.title}
                   </h3>

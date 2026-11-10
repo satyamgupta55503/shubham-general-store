@@ -11,7 +11,7 @@ const SECTIONS = [
   {
     n: "01",
     title: "Check Before You Accept",
-    body: "Please check your items at the time of delivery. For perishable goods like vegetables, fruits, dairy, and bakery, any issue must be reported immediately on delivery or within the same day so we can act quickly.",
+    body: "Please check your items at the time of delivery. For items with a short shelf life such as biscuits, bakery and namkeen, any issue must be reported immediately on delivery or within the same day so we can act quickly.",
   },
   {
     n: "02",

@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import {
   LayoutDashboard,
   FileText,
+  FolderOpen,
   Briefcase,
   Home,
   User,
@@ -138,6 +139,13 @@ const Asidebar = ({ open = false, onClose }) => {
       name: "Sent Documents",
       icon: FileText,
       link: "/admin/store/sent-documents",
+      roles: ["superadmin", "admin"],
+    },
+    {
+      id: "store-documents",
+      name: "Documents",
+      icon: FolderOpen,
+      link: "/admin/store/documents",
       roles: ["superadmin", "admin"],
     },
   ];
